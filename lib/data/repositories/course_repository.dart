@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import '../models/audio_drill.dart';
 import '../models/day_lesson.dart';
@@ -22,9 +23,21 @@ class CourseRepository {
     final weekNumber = ((dayNumber - 1) ~/ 7) + 1;
     try {
       if (weekNumber == 1) {
-        final jsonString = await rootBundle.loadString(
-          'assets/courses/kazakh_90_days/weeks/week_01.json',
-        );
+        String jsonString;
+        try {
+          jsonString = await rootBundle.loadString(
+            'assets/courses/kazakh_90_days/weeks/week_01.json',
+          );
+        } catch (_) {
+          // Резервное чтение файла в тестовой среде
+          final file = File('assets/courses/kazakh_90_days/weeks/week_01.json');
+          if (await file.exists()) {
+            jsonString = await file.readAsString();
+          } else {
+            rethrow;
+          }
+        }
+
         final Map<String, dynamic> data = jsonDecode(jsonString);
         final List<dynamic> daysList = data['days'] as List<dynamic>;
 
@@ -51,14 +64,48 @@ class CourseRepository {
   Future<Map<String, dynamic>> getGrammarMatrix() async {
     if (_grammarMatrix != null) return _grammarMatrix!;
     try {
-      final jsonString = await rootBundle.loadString(
-        'assets/courses/kazakh_90_days/grammar_matrix.json',
-      );
+      String jsonString;
+      try {
+        jsonString = await rootBundle.loadString(
+          'assets/courses/kazakh_90_days/grammar_matrix.json',
+        );
+      } catch (_) {
+        final file = File('assets/courses/kazakh_90_days/grammar_matrix.json');
+        if (await file.exists()) {
+          jsonString = await file.readAsString();
+        } else {
+          rethrow;
+        }
+      }
       _grammarMatrix = jsonDecode(jsonString) as Map<String, dynamic>;
       return _grammarMatrix!;
     } catch (_) {
       return {};
     }
+  }
+
+  /// Сбор всех дрилов для указанных дней
+  Future<List<AudioDrill>> getDrillsForDays(Iterable<int> days) async {
+    final List<AudioDrill> result = [];
+    for (final day in days) {
+      final lesson = await getLessonForDay(day);
+      result.addAll(lesson.drills);
+    }
+    return result;
+  }
+
+  /// Получение случайной выборки речевых дрилов для свободной практики
+  Future<List<AudioDrill>> getQuickWorkoutDrills({
+    required Set<int> completedDays,
+    int count = 10,
+  }) async {
+    final daysToFetch = completedDays.isEmpty ? {1} : completedDays;
+    final allDrills = await getDrillsForDays(daysToFetch);
+    allDrills.shuffle();
+    if (allDrills.length > count) {
+      return allDrills.sublist(0, count);
+    }
+    return allDrills;
   }
 
   /// Автоматическое создание карточек интервального повторения (SRS) из урока

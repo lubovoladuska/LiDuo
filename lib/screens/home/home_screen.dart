@@ -15,6 +15,7 @@ import '../ai_dialogue/ai_chat_screen.dart';
 import '../settings/settings_screen.dart';
 import 'widgets/daily_goals_row.dart';
 import 'widgets/fluency_meter.dart';
+import '../practice/practice_screen.dart';
 
 /// Главный экран LiDuo
 class HomeScreen extends StatefulWidget {
@@ -160,6 +161,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (_todayLesson != null)
                       _buildSprintHeroCard(context, _todayLesson!),
 
+                    const SizedBox(height: 16),
+
+                    // Центр свободной практики речи
+                    _buildPracticePromoCard(context),
+
                     const SizedBox(height: 24),
 
                     // Сетка быстрых модулей
@@ -261,6 +267,64 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+    );
+  }
+
+  Widget _buildPracticePromoCard(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const PracticeScreen()),
+        ).then((_) => _loadData());
+      },
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.tealLight.withAlpha(80),
+            width: 1.2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.teal.withAlpha(30),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.fitness_center_rounded, color: AppColors.tealLight, size: 26),
+            ),
+            const SizedBox(width: 16),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Сөйлеу жаттығулары (Тренажер речи)',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Экспресс-спринты, работа над ошибками и практика по темам',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondaryDark,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.tealLight),
+          ],
+        ),
+      ),
     );
   }
 

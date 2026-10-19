@@ -214,4 +214,14 @@ class AppDatabase {
       'created_at': DateTime.now().toIso8601String(),
     });
   }
+
+  Future<List<Map<String, dynamic>>> getWeakDrillAttempts({int limit = 30}) async {
+    final db = await database;
+    return await db.query(
+      'drill_history',
+      where: 'passed = 0 OR similarity < 0.8',
+      orderBy: 'created_at DESC',
+      limit: limit,
+    );
+  }
 }
