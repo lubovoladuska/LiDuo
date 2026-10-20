@@ -84,9 +84,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const Divider(height: 32),
 
           _buildSectionHeader('ИИ-Серіктес (Gemini API / Опционально)'),
-          const Text(
+          Text(
             'Приложение полностью автономно и работает оффлайн. Если вы хотите вести свободные диалоги с ИИ-партнером, укажите бесплатный ключ Gemini API.',
-            style: TextStyle(fontSize: 13, color: AppColors.textSecondaryDark, height: 1.4),
+            style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context), height: 1.4),
           ),
           const SizedBox(height: 14),
           TextField(
@@ -124,17 +124,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: Theme.of(context).dividerTheme.color ?? AppColors.darkBorder,
               ),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'LiDuo v1.0.0',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.goldAccent(context)),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 Text(
                   'Бескомпромиссно эффективная открытая система обучения казахскому языку.\nСоздано с заботой о развитии разговорной речи.',
-                  style: TextStyle(fontSize: 13, color: AppColors.textSecondaryDark, height: 1.4),
+                  style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context), height: 1.4),
                 ),
               ],
             ),

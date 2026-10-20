@@ -43,4 +43,59 @@ class AppColors {
   static const Color textPrimaryLight = Color(0xFF111827);
   static const Color textSecondaryLight = Color(0xFF4B5563);
   static const Color textMutedLight = Color(0xFF9CA3AF);
+
+  // Адаптивные вспомогательные методы под активную тему
+  static Color textPrimary(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? textPrimaryDark
+        : textPrimaryLight;
+  }
+
+  static Color textSecondary(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? textSecondaryDark
+        : textSecondaryLight;
+  }
+
+  static Color textMuted(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? textMutedDark
+        : textMutedLight;
+  }
+
+  static Color cardBackground(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkCard
+        : lightSurface;
+  }
+
+  static Color cardBorder(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? darkBorder
+        : lightBorder;
+  }
+
+  static Color goldAccent(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? goldLight
+        : const Color(0xFFB45309);
+  }
+
+  static Color tealAccent(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? tealLight
+        : tealDark;
+  }
+
+  static Color subtleContainer(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.black.withAlpha(60)
+        : const Color(0xFFF1F5F9);
+  }
+
+  static Color transcriptionChip(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.white.withAlpha(16)
+        : const Color(0xFFE2E8F0);
+  }
 }

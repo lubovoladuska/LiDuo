@@ -95,9 +95,9 @@ class DailyGoalsRow extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
-              color: AppColors.textSecondaryDark,
+              color: AppColors.textSecondary(context),
               fontWeight: FontWeight.w600,
             ),
             maxLines: 1,

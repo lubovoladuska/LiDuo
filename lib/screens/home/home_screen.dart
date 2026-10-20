@@ -95,11 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(width: 10),
-            const Text(
+            Text(
               '90 күнде еркін сөйлеу',
               style: TextStyle(
                 fontSize: 14,
-                color: AppColors.textSecondaryDark,
+                color: AppColors.textSecondary(context),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -299,23 +299,23 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.fitness_center_rounded, color: AppColors.tealLight, size: 26),
             ),
             const SizedBox(width: 16),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Сөйлеу жаттығулары (Тренажер речи)',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     'Экспресс-спринты, работа над ошибками и практика по темам',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.textSecondaryDark,
+                      color: AppColors.textSecondary(context),
                     ),
                   ),
                 ],
@@ -329,22 +329,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSprintHeroCard(BuildContext context, DayLesson lesson) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xFF262015),
-            Color(0xFF1B1E26),
-          ],
+        gradient: LinearGradient(
+          colors: isDark
+              ? const [Color(0xFF262015), Color(0xFF1B1E26)]
+              : const [Color(0xFFFFFBEB), Color(0xFFFEF3C7)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.gold, width: 1.5),
+        border: Border.all(
+          color: isDark ? AppColors.gold : AppColors.goldDark,
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.gold.withAlpha(25),
+            color: (isDark ? AppColors.gold : AppColors.goldDark).withAlpha(isDark ? 25 : 45),
             blurRadius: 20,
             spreadRadius: 1,
             offset: const Offset(0, 4),
@@ -360,29 +364,33 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.gold,
+                  color: isDark ? AppColors.gold : AppColors.goldDark,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'КҮН ${lesson.dayNumber} • АПТА ${lesson.weekNumber}',
-                  style: const TextStyle(
-                    color: AppColors.darkBackground,
+                  style: TextStyle(
+                    color: isDark ? AppColors.darkBackground : Colors.white,
                     fontWeight: FontWeight.w800,
                     fontSize: 11,
                     letterSpacing: 0.5,
                   ),
                 ),
               ),
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.mic, size: 16, color: AppColors.goldLight),
-                  SizedBox(width: 4),
+                  Icon(
+                    Icons.mic,
+                    size: 16,
+                    color: isDark ? AppColors.goldLight : AppColors.goldDark,
+                  ),
+                  const SizedBox(width: 4),
                   Text(
                     '20 мин • Говорение вслух',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.goldLight,
-                      fontWeight: FontWeight.w600,
+                      color: isDark ? AppColors.goldLight : AppColors.goldDark,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ],
@@ -392,23 +400,27 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 14),
           Text(
             lesson.title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
+              color: isDark ? Colors.white : const Color(0xFF1F2937),
             ),
           ),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.black.withAlpha(80),
+              color: isDark ? Colors.black.withAlpha(80) : AppColors.gold.withAlpha(35),
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isDark ? AppColors.gold.withAlpha(50) : AppColors.goldDark.withAlpha(70),
+              ),
             ),
             child: Text(
               'Формула: ${lesson.grammarFormula}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
-                color: AppColors.goldLight,
+                color: isDark ? AppColors.goldLight : const Color(0xFF92400E),
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -490,9 +502,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11,
-                color: AppColors.textSecondaryDark,
+                color: AppColors.textSecondary(context),
                 fontWeight: FontWeight.w500,
               ),
               maxLines: 1,

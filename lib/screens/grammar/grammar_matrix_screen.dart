@@ -46,9 +46,9 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
         title: const Text('Грамматикалық матрица'),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppColors.gold,
-          labelColor: AppColors.gold,
-          unselectedLabelColor: AppColors.textSecondaryDark,
+          indicatorColor: AppColors.goldAccent(context),
+          labelColor: AppColors.goldAccent(context),
+          unselectedLabelColor: AppColors.textSecondary(context),
           tabs: const [
             Tab(text: '7 Падеж'),
             Tab(text: 'Сингармонизм'),
@@ -95,14 +95,14 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
                 children: [
                   Text(
                     item['name'] ?? '',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.gold,
+                      color: AppColors.goldAccent(context),
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.volume_up, size: 20, color: AppColors.gold),
+                    icon: Icon(Icons.volume_up, size: 20, color: AppColors.goldAccent(context)),
                     onPressed: () {
                       final ex = item['example']?.toString() ?? '';
                       if (ex.isNotEmpty) TtsService.instance.speak(ex);
@@ -114,22 +114,22 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
               const SizedBox(height: 6),
               Text(
                 'Сұрақтары: ${item['questions']}',
-                style: const TextStyle(fontSize: 13, color: AppColors.textSecondaryDark),
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context)),
               ),
               const SizedBox(height: 4),
               Text(
                 'Жалғаулары: ${item['endings']}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.tealLight,
+                  color: AppColors.tealAccent(context),
                 ),
               ),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(40),
+                  color: AppColors.subtleContainer(context),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -157,15 +157,15 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.gold.withAlpha(60)),
           ),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Закон сингармонизма (Үндестік заңы)',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.goldAccent(context)),
               ),
-              SizedBox(height: 6),
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 'Казахский язык подчиняется железному закону созвучия: в одном слове и его аффиксах могут быть гласные ТОЛЬКО твердого ряда, либо ТОЛЬКО мягкого ряда.',
                 style: TextStyle(fontSize: 13, height: 1.4),
               ),
@@ -195,22 +195,22 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
                 const SizedBox(height: 6),
                 Text(
                   'Дыбыстар: ${r['vowels']}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.tealLight,
+                    color: AppColors.tealAccent(context),
                     letterSpacing: 2,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   r['rule'] ?? '',
-                  style: const TextStyle(fontSize: 13, color: AppColors.textSecondaryDark),
+                  style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context)),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Мысал: ${r['example']}',
-                  style: const TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: AppColors.gold),
+                  style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: AppColors.goldAccent(context)),
                 ),
               ],
             ),
@@ -243,7 +243,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
             children: [
               Text(
                 item['pronoun'] ?? '',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.goldAccent(context)),
               ),
               const SizedBox(height: 6),
               Text(
@@ -254,12 +254,12 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(40),
+                  color: AppColors.subtleContainer(context),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Мысалы: ${item['example']}',
-                  style: const TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: AppColors.tealLight),
+                  style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: AppColors.tealAccent(context)),
                 ),
               ),
             ],

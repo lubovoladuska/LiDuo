@@ -47,11 +47,11 @@ class FluencyMeter extends StatelessWidget {
                     color: AppColors.gold,
                   ),
                 ),
-                const Text(
+                Text(
                   'B1/B2',
                   style: TextStyle(
                     fontSize: 10,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.textSecondary(context),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -66,12 +66,12 @@ class FluencyMeter extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Сөйлеу деңгейі (Разговорная готовность)',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.textSecondary(context),
                   ),
                 ),
                 const SizedBox(height: 6),

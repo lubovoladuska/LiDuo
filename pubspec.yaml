@@ -48,3 +48,4 @@ flutter:
 
   assets:
     - assets/courses/kazakh_90_days/
+    - assets/courses/kazakh_90_days/weeks/

@@ -153,18 +153,18 @@ class _PracticeScreenState extends State<PracticeScreen> {
                         child: const Icon(Icons.fitness_center_rounded, color: AppColors.gold, size: 28),
                       ),
                       const SizedBox(width: 16),
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Еркін сөйлеу бұлшықеті',
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
                             ),
-                            SizedBox(height: 4),
+                            const SizedBox(height: 4),
                             Text(
                               'Қосымша 10–15 минут еркін сөйлеу сөздік қор мен тілдік реакцияны 3 есе жылдамдатады.',
-                              style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark, height: 1.3),
+                              style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context), height: 1.3),
                             ),
                           ],
                         ),
@@ -211,7 +211,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                   title: '🧩 Подстановочный тренажер (Slot Matrix)',
                   subtitle: 'Отработка быстрой подстановки в грамматические слоты',
                   badge: '12 слотов',
-                  badgeColor: AppColors.goldLight,
+                  badgeColor: AppColors.goldAccent(context),
                   onTap: _startSlotMatrix,
                 ),
 
@@ -285,7 +285,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                       ),
                       subtitle: Text(
                         '10–12 речевых дрилов',
-                        style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark),
+                        style: TextStyle(fontSize: 11, color: AppColors.textSecondary(context)),
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.gold),
                       onTap: () => _startDayPractice(day),
@@ -332,7 +332,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                   const SizedBox(height: 6),
                   Text(
                     subtitle,
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                    style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context)),
                   ),
                 ],
               ),

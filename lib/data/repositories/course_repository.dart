@@ -201,6 +201,7 @@ class CourseRepository {
             step: 1,
             promptRu: 'Скажите: «Мой друг»',
             targetKk: 'Менің досым',
+            phoneticTranscription: 'Менин досым',
             grammarNote: 'Дос + ым = мой друг.',
           ),
           AudioDrill(
@@ -208,6 +209,7 @@ class CourseRepository {
             step: 2,
             promptRu: 'Скажите: «Наш дом»',
             targetKk: 'Біздің үйіміз',
+            phoneticTranscription: 'Биздин уйимис',
             grammarNote: 'Үй + іміз = наш дом.',
           ),
           AudioDrill(
@@ -215,6 +217,7 @@ class CourseRepository {
             step: 3,
             promptRu: 'Скажите: «Много друзей»',
             targetKk: 'Көп достар',
+            phoneticTranscription: 'Коп достар',
             grammarNote: 'После сонорной «с» окончание «-тар/-тер».',
           ),
         ],
@@ -238,6 +241,7 @@ class CourseRepository {
             step: 1,
             promptRu: 'Скажите: «Я иду в магазин»',
             targetKk: 'Мен дүкенге барамын',
+            phoneticTranscription: 'Мен дукенге барамын',
             grammarNote: 'Дүкен + ге (куда?).',
           ),
           AudioDrill(
@@ -245,6 +249,7 @@ class CourseRepository {
             step: 2,
             promptRu: 'Скажите: «Я пришел с работы»',
             targetKk: 'Мен жұмыстан келдім',
+            phoneticTranscription: 'Мен жумыстан келдим',
             grammarNote: 'Жұмыс + тан (откуда?).',
           ),
         ],
@@ -268,6 +273,7 @@ class CourseRepository {
             step: 1,
             promptRu: 'Скажите: «Я хочу выпить чаю»',
             targetKk: 'Менің шай ішкім келеді',
+            phoneticTranscription: 'Менин шай ишким келеди',
             grammarNote: 'Іш + кім келеді = хочу пить.',
           ),
           AudioDrill(
@@ -275,6 +281,7 @@ class CourseRepository {
             step: 2,
             promptRu: 'Скажите: «Я хочу говорить по-казахски»',
             targetKk: 'Менің қазақша сөйлескім келеді',
+            phoneticTranscription: 'Менин казакша сойлеским келеди',
             grammarNote: 'Сөйлес + кім келеді.',
           ),
         ],
@@ -298,6 +305,7 @@ class CourseRepository {
             step: 1,
             promptRu: 'Скажите: «По моему мнению, это очень важно»',
             targetKk: 'Менің ойымша, бұл өте маңызды',
+            phoneticTranscription: 'Менин ойымша, бул оте манызды',
             grammarNote: 'Конструкция выражения мнения.',
           ),
         ],

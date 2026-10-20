@@ -144,7 +144,7 @@ class RoadmapScreen extends StatelessWidget {
         ),
         subtitle: Text(
           _getWeekTopic(weekNum),
-          style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+          style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context)),
         ),
         children: [
           const Divider(height: 1),
@@ -176,7 +176,7 @@ class RoadmapScreen extends StatelessWidget {
           border: Border.all(
             color: isCompleted
                 ? AppColors.success
-                : (isCurrent ? AppColors.gold : AppColors.darkBorder),
+                : (isCurrent ? AppColors.goldAccent(context) : AppColors.cardBorder(context)),
             width: 1.5,
           ),
         ),
@@ -188,7 +188,7 @@ class RoadmapScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: isCurrent ? AppColors.gold : AppColors.textSecondaryDark,
+                  color: isCurrent ? AppColors.goldAccent(context) : AppColors.textSecondary(context),
                 ),
               ),
       ),
@@ -197,14 +197,14 @@ class RoadmapScreen extends StatelessWidget {
         style: TextStyle(
           fontSize: 13,
           fontWeight: isCurrent ? FontWeight.w800 : FontWeight.w600,
-          color: isCurrent ? AppColors.gold : null,
+          color: isCurrent ? AppColors.goldAccent(context) : null,
         ),
       ),
       trailing: isCurrent
           ? Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                color: AppColors.gold,
+                color: AppColors.goldAccent(context),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: const Text(
@@ -216,7 +216,7 @@ class RoadmapScreen extends StatelessWidget {
                 ),
               ),
             )
-          : const Icon(Icons.chevron_right, size: 18, color: AppColors.textSecondaryDark),
+          : Icon(Icons.chevron_right, size: 18, color: AppColors.textSecondary(context)),
       onTap: () async {
         final lesson = await CourseRepository.instance.getLessonForDay(dayNumber);
         if (context.mounted) {

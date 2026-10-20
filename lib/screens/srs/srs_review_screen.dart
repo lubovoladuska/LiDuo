@@ -48,21 +48,21 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
           children: [
             const Text('🌟', style: TextStyle(fontSize: 64)),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Бүгінге қайталайтын карточка жоқ!',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: AppColors.gold,
+                color: AppColors.goldAccent(context),
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Сіз барлық карточкаларды жаттадыңыз. Жаңа карточкалар күнделікті сабақтардан кейін қосылады.',
               style: TextStyle(
                 fontSize: 14,
-                color: AppColors.textSecondaryDark,
+                color: AppColors.textSecondary(context),
                 height: 1.4,
               ),
               textAlign: TextAlign.center,
@@ -97,9 +97,9 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
               children: [
                 Text(
                   'Карточка: ${srs.currentIndex + 1} / ${srs.dueCount}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.textSecondary(context),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -111,9 +111,9 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                   ),
                   child: Text(
                     'Интервал: ${card.intervalDays} к.',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.gold,
+                      color: AppColors.goldAccent(context),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -133,12 +133,12 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                     color: Theme.of(context).cardTheme.color,
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(
-                      color: srs.isFlipped ? AppColors.gold : AppColors.darkBorder,
+                      color: srs.isFlipped ? AppColors.goldAccent(context) : AppColors.cardBorder(context),
                       width: 1.5,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withAlpha(40),
+                        color: Colors.black.withAlpha(Theme.of(context).brightness == Brightness.dark ? 40 : 15),
                         blurRadius: 16,
                         offset: const Offset(0, 6),
                       ),
@@ -147,12 +147,12 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'ЕСКЕ ТҮСІРІҢІЗ ЖӘНЕ АЙТЫҢЫЗ:',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.textSecondaryDark,
+                          color: AppColors.textSecondary(context),
                           letterSpacing: 1.0,
                         ),
                       ),
@@ -171,14 +171,14 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                         const SizedBox(height: 40),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.touch_app, size: 18, color: AppColors.gold),
-                            SizedBox(width: 8),
+                          children: [
+                            Icon(Icons.touch_app, size: 18, color: AppColors.goldAccent(context)),
+                            const SizedBox(width: 8),
                             Text(
                               'Төңкеру үшін басыңыз (Показать ответ)',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: AppColors.gold,
+                                color: AppColors.goldAccent(context),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -188,20 +188,20 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
 
                       if (srs.isFlipped) ...[
                         const SizedBox(height: 30),
-                        const Divider(color: AppColors.darkBorder),
+                        Divider(color: AppColors.cardBorder(context)),
                         const SizedBox(height: 20),
                         Text(
                           card.backTarget,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w900,
-                            color: AppColors.gold,
+                            color: AppColors.goldAccent(context),
                           ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 12),
                         IconButton(
-                          icon: const Icon(Icons.volume_up_rounded, color: AppColors.gold, size: 28),
+                          icon: Icon(Icons.volume_up_rounded, color: AppColors.goldAccent(context), size: 28),
                           onPressed: srs.playAudio,
                           tooltip: 'Тыңдау',
                         ),
@@ -209,9 +209,9 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                           const SizedBox(height: 8),
                           Text(
                             card.note!,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
-                              color: AppColors.textSecondaryDark,
+                              color: AppColors.textSecondary(context),
                             ),
                             textAlign: TextAlign.center,
                           ),
