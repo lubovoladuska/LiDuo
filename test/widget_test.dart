@@ -35,6 +35,6 @@ void main() {
 
     // Проверяем наличие логотипа LiDuo и девиза
     expect(find.text('LiDuo'), findsOneWidget);
-    expect(find.text('90 күнде еркін сөйлеу'), findsOneWidget);
+    expect(find.textContaining('90 күнде еркін сөйлеу'), findsOneWidget);
   });
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../providers/settings_provider.dart';
 
 /// Виджет панели ежедневных целей и прогресса
 class DailyGoalsRow extends StatelessWidget {
@@ -18,43 +20,45 @@ class DailyGoalsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+
     return Row(
       children: [
         Expanded(
           child: _buildMetricCard(
             context,
             icon: '🔥',
-            label: 'Стрик',
-            value: '$streakDays к.',
+            label: settings.label('Стрик', 'Күн'),
+            value: '$streakDays д.',
             color: AppColors.gold,
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Expanded(
           child: _buildMetricCard(
             context,
             icon: '🎙️',
-            label: 'Дриллы',
+            label: settings.label('Дриллы', 'Дрил'),
             value: '$drillsCompleted',
             color: AppColors.tealLight,
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Expanded(
           child: _buildMetricCard(
             context,
             icon: '🧠',
-            label: 'Повторить',
+            label: settings.label('Память', 'Қайталау'),
             value: '$dueSrsCount',
             color: dueSrsCount > 0 ? AppColors.warning : AppColors.success,
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Expanded(
           child: _buildMetricCard(
             context,
             icon: '⏱️',
-            label: 'Минуты',
+            label: settings.label('Минуты', 'Минут'),
             value: '$minutesPracticed м.',
             color: Colors.blueAccent,
           ),

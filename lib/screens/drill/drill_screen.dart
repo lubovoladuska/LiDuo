@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/audio_drill.dart';
 import '../../providers/drill_session_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../providers/stats_provider.dart';
 
 /// Экран активного речевого дрила с адаптивным UI под разные типы заданий
@@ -16,36 +17,27 @@ class DrillScreen extends StatefulWidget {
 
 class _DrillScreenState extends State<DrillScreen> {
   int _lastDrillIndex = -1;
-  bool _revealListening = false;
 
   @override
   Widget build(BuildContext context) {
     final session = context.watch<DrillSessionProvider>();
     final statsProvider = context.read<StatsProvider>();
+    final settings = context.watch<SettingsProvider>();
     final drill = session.currentDrill;
 
     if (session.status == DrillStatus.finished) {
-      return _buildCelebrationScreen(context, session);
+      return _buildCelebrationScreen(context, session, settings);
     }
 
     if (drill == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Сабақ')),
-        body: const Center(child: Text('Деректер табылмады')),
+        appBar: AppBar(title: Text(settings.label('Урок', 'Сабақ'))),
+        body: Center(child: Text(settings.label('Данные не найдены', 'Деректер табылмады'))),
       );
     }
 
-    // Автоматическое воспроизведение эталонного звука при переходе на vocab или listening
     if (_lastDrillIndex != session.currentDrillIndex) {
       _lastDrillIndex = session.currentDrillIndex;
-      _revealListening = false;
-      if (drill.type == DrillType.vocab || drill.type == DrillType.listening) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            session.playTargetAudio();
-          }
-        });
-      }
     }
 
     return Scaffold(
@@ -55,7 +47,10 @@ class _DrillScreenState extends State<DrillScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Күн ${session.lesson?.dayNumber ?? 1} • Қадам ${session.currentDrillIndex + 1}/${session.totalDrills}',
+          settings.label(
+            'День ${session.lesson?.dayNumber ?? 1} • Шаг ${session.currentDrillIndex + 1}/${session.totalDrills}',
+            'Күн ${session.lesson?.dayNumber ?? 1} • Қадам ${session.currentDrillIndex + 1}/${session.totalDrills}',
+          ),
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
         ),
         actions: [
@@ -65,7 +60,7 @@ class _DrillScreenState extends State<DrillScreen> {
               color: session.showHint ? AppColors.gold : AppColors.textSecondary(context),
             ),
             onPressed: session.toggleHint,
-            tooltip: 'Көмек / Подсказка',
+            tooltip: settings.label('Подсказка', 'Көмек'),
           ),
         ],
       ),
@@ -89,7 +84,7 @@ class _DrillScreenState extends State<DrillScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Бейдж типа упражнения
-                    _buildTypeBadge(drill.type),
+                    _buildTypeBadge(drill.type, settings),
                     const SizedBox(height: 14),
 
                     // Карточка формулы урока (свернутая)
@@ -114,13 +109,13 @@ class _DrillScreenState extends State<DrillScreen> {
 
                     const SizedBox(height: 20),
 
-                    // Адаптивная карточка задания в зависимости от DrillType
-                    _buildDrillCard(context, drill, session),
+                    // Карточка задания
+                    _buildDrillCard(context, drill, session, settings),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 24),
 
-                    // Поле распознанной речи
-                    if (session.spokenText.isNotEmpty || session.status == DrillStatus.listening)
+                    // Блок статуса распознавания речи
+                    if (session.status != DrillStatus.idle)
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
@@ -132,6 +127,7 @@ class _DrillScreenState extends State<DrillScreen> {
                                 : (session.status == DrillStatus.retry
                                     ? AppColors.warning
                                     : AppColors.gold),
+                            width: 1.2,
                           ),
                         ),
                         child: Column(
@@ -155,10 +151,19 @@ class _DrillScreenState extends State<DrillScreen> {
                                 const SizedBox(width: 8),
                                 Text(
                                   session.status == DrillStatus.passed
-                                      ? 'Дұрыс! (${(session.similarityScore * 100).toInt()}% сәйкестік)'
+                                      ? settings.label(
+                                          'Правильно! (${(session.similarityScore * 100).toInt()}% совпадение)',
+                                          'Дұрыс! (${(session.similarityScore * 100).toInt()}%)',
+                                        )
                                       : (session.status == DrillStatus.retry
-                                          ? 'Қайталап көріңіз (${(session.similarityScore * 100).toInt()}%)'
-                                          : 'Тыңдап тұрмын... (Говорите)'),
+                                          ? settings.label(
+                                              'Повторите еще раз (${(session.similarityScore * 100).toInt()}%)',
+                                              'Қайталап көріңіз (${(session.similarityScore * 100).toInt()}%)',
+                                            )
+                                          : settings.label(
+                                              'Слушаю вас... (Говорите)',
+                                              'Тыңдап тұрмын... (Говорите)',
+                                            )),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: session.status == DrillStatus.passed
@@ -208,8 +213,8 @@ class _DrillScreenState extends State<DrillScreen> {
                         icon: const Icon(Icons.arrow_forward_rounded, size: 24),
                         label: Text(
                           session.currentDrillIndex + 1 < session.totalDrills
-                              ? 'Келесі қадам (Следующий)'
-                              : 'Аяқтау (Завершить день)',
+                              ? settings.label('Следующий шаг (Далее)', 'Келесі қадам')
+                              : settings.label('Завершить день', 'Аяқтау'),
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                         ),
                         onPressed: () => session.nextDrill(statsProvider),
@@ -224,8 +229,8 @@ class _DrillScreenState extends State<DrillScreen> {
                             onPressed: session.manualPass,
                             child: Text(
                               drill.type == DrillType.vocab
-                                  ? 'Жаттадым\n(Запомнил)'
-                                  : 'Дұрыс айттым\n(Засчитать)',
+                                  ? settings.label('Запомнил', 'Жаттадым')
+                                  : settings.label('Сказал правильно\n(Засчитать)', 'Дұрыс айттым'),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 12,
@@ -269,12 +274,12 @@ class _DrillScreenState extends State<DrillScreen> {
                           ),
                         ),
 
-                        // Кнопка очистки / повтора
+                        // Кнопка повтора
                         if (session.status == DrillStatus.retry)
                           IconButton(
                             icon: const Icon(Icons.refresh_rounded, color: AppColors.gold),
                             onPressed: session.startListening,
-                            tooltip: 'Қайталау',
+                            tooltip: settings.label('Повторить', 'Қайталау'),
                           ),
                       ],
                     ),
@@ -286,30 +291,30 @@ class _DrillScreenState extends State<DrillScreen> {
   }
 
   /// Бейдж типа практики
-  Widget _buildTypeBadge(DrillType type) {
+  Widget _buildTypeBadge(DrillType type, SettingsProvider settings) {
     String label;
     IconData icon;
     Color color;
 
     switch (type) {
       case DrillType.vocab:
-        label = '1/4 СӨЗДІК ЗАРЯД (СЛОВАРНЫЙ ПРАЙМЕР)';
+        label = settings.label('1/4 СЛОВАРЬ (СЛОВО ДНЯ)', '1/4 СӨЗДІК БАЗА');
         icon = Icons.auto_stories_rounded;
         color = AppColors.tealLight;
         break;
       case DrillType.slotSubstitution:
-        label = '2/4 ПОДСТАНОВКА (SLOT MATRIX)';
+        label = settings.label('2/4 ПОДСТАНОВКА (SLOT MATRIX)', '2/4 ҚАЛЫПҚА ҚОЮ');
         icon = Icons.dashboard_customize_rounded;
         color = AppColors.gold;
         break;
       case DrillType.listening:
-        label = '3/4 АУДИРОВАНИЕ (SHADOWING)';
-        icon = Icons.headphones_rounded;
+        label = settings.label('3/4 ЭКСПРЕСС-ЧТЕНИЕ (SHADOWING)', '3/4 ОҚУ ЖӘНЕ АЙТУ');
+        icon = Icons.record_voice_over_rounded;
         color = const Color(0xFFA78BFA);
         break;
       case DrillType.speech:
-        label = '4/4 СӨЙЛЕУ ЖАТТЫҒУЫ (РЕЧЕВОЙ ДРИЛ)';
-        icon = Icons.record_voice_over_rounded;
+        label = settings.label('4/4 РЕЧЕВОЙ ДРИЛ', '4/4 СӨЙЛЕУ ЖАТТЫҒУЫ');
+        icon = Icons.mic_rounded;
         color = AppColors.goldAccent(context);
         break;
     }
@@ -342,7 +347,12 @@ class _DrillScreenState extends State<DrillScreen> {
   }
 
   /// Адаптивное наполнение карточки дрила
-  Widget _buildDrillCard(BuildContext context, AudioDrill drill, DrillSessionProvider session) {
+  Widget _buildDrillCard(
+    BuildContext context,
+    AudioDrill drill,
+    DrillSessionProvider session,
+    SettingsProvider settings,
+  ) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -354,27 +364,27 @@ class _DrillScreenState extends State<DrillScreen> {
         ),
       ),
       child: switch (drill.type) {
-        DrillType.vocab => _buildVocabCard(drill, session),
-        DrillType.slotSubstitution => _buildSlotCard(drill, session),
-        DrillType.listening => _buildListeningCard(drill, session),
-        DrillType.speech => _buildSpeechCard(drill, session),
+        DrillType.vocab => _buildVocabCard(drill, session, settings),
+        DrillType.slotSubstitution => _buildSlotCard(drill, session, settings),
+        DrillType.listening => _buildListeningCard(drill, session, settings),
+        DrillType.speech => _buildSpeechCard(drill, session, settings),
       },
     );
   }
 
   /// Карточка словарного праймера (Vocab)
-  Widget _buildVocabCard(AudioDrill drill, DrillSessionProvider session) {
+  Widget _buildVocabCard(AudioDrill drill, DrillSessionProvider session, SettingsProvider settings) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          'ЖАҢА СӨЗДІ ТЫҢДАП, ҚАЙТАЛАҢЫЗ:',
+        Text(
+          settings.label('НОВОЕ СЛОВО (ПРОЧТИТЕ И ПОВТОРИТЕ):', 'ЖАҢА СӨЗДІ ОҚЫП, ҚАЙТАЛАҢЫЗ:'),
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: AppColors.tealLight,
+            color: AppColors.tealAccent(context),
             letterSpacing: 1.0,
           ),
         ),
@@ -382,22 +392,22 @@ class _DrillScreenState extends State<DrillScreen> {
         Text(
           drill.targetKk,
           style: TextStyle(
-            fontSize: 32,
+            fontSize: 34,
             fontWeight: FontWeight.w900,
             color: isDark ? AppColors.goldLight : AppColors.goldDark,
           ),
           textAlign: TextAlign.center,
         ),
-        if (drill.phoneticTranscription != null) ...[
+        if (drill.phoneticTranscription != null || drill.targetKk.isNotEmpty) ...[
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
             decoration: BoxDecoration(
               color: (isDark ? Colors.white : Colors.black).withAlpha(12),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              '[ ${drill.phoneticTranscription} ]',
+              '[ ${drill.phoneticTranscription ?? drill.targetKk} ]',
               style: TextStyle(
                 fontSize: 14,
                 fontFamily: 'monospace',
@@ -417,18 +427,12 @@ class _DrillScreenState extends State<DrillScreen> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 18),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.volume_up_rounded, color: AppColors.darkBackground),
-          label: const Text('Үлгіні тыңдау (Слушать)'),
-          onPressed: session.playTargetAudio,
-        ),
         if (drill.grammarNote != null) ...[
           const SizedBox(height: 16),
           Text(
             drill.grammarNote!,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 13,
               color: AppColors.textSecondary(context),
               height: 1.3,
             ),
@@ -440,7 +444,7 @@ class _DrillScreenState extends State<DrillScreen> {
   }
 
   /// Карточка подстановочного тренажера (Slot Substitution)
-  Widget _buildSlotCard(AudioDrill drill, DrillSessionProvider session) {
+  Widget _buildSlotCard(AudioDrill drill, DrillSessionProvider session, SettingsProvider settings) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final template = drill.slotTemplate ?? drill.targetKk;
     final variable = drill.slotVariable ?? drill.targetKk;
@@ -448,12 +452,12 @@ class _DrillScreenState extends State<DrillScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:',
+        Text(
+          settings.label('ПОДСТАВЬТЕ СЛОВО В ШАБЛОН:', 'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:'),
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: AppColors.gold,
+            color: AppColors.goldAccent(context),
             letterSpacing: 1.0,
           ),
         ),
@@ -483,7 +487,7 @@ class _DrillScreenState extends State<DrillScreen> {
           child: Column(
             children: [
               Text(
-                'Үлгі / Каркас: $template',
+                settings.label('Шаблон / Каркас: $template', 'Үлгі: $template'),
                 style: TextStyle(
                   fontSize: 13,
                   color: AppColors.textSecondary(context),
@@ -499,7 +503,7 @@ class _DrillScreenState extends State<DrillScreen> {
                   border: Border.all(color: AppColors.tealLight),
                 ),
                 child: Text(
-                  'Слот: «$variable»',
+                  '${settings.label('Слот', 'Слот')}: «$variable»',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -516,16 +520,16 @@ class _DrillScreenState extends State<DrillScreen> {
         Text(
           drill.targetKk,
           style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
             color: isDark ? AppColors.goldLight : AppColors.goldDark,
           ),
           textAlign: TextAlign.center,
         ),
-        if (drill.phoneticTranscription != null) ...[
+        if (drill.phoneticTranscription != null || drill.targetKk.isNotEmpty) ...[
           const SizedBox(height: 6),
           Text(
-            '[ ${drill.phoneticTranscription} ]',
+            '[ ${drill.phoneticTranscription ?? drill.targetKk} ]',
             style: TextStyle(
               fontSize: 13,
               fontFamily: 'monospace',
@@ -535,28 +539,20 @@ class _DrillScreenState extends State<DrillScreen> {
             textAlign: TextAlign.center,
           ),
         ],
-        const SizedBox(height: 14),
-        OutlinedButton.icon(
-          icon: const Icon(Icons.volume_up_rounded, color: AppColors.gold),
-          label: const Text('Үлгіні тыңдау (Послушать фразу)'),
-          onPressed: session.playTargetAudio,
-        ),
       ],
     );
   }
 
-  /// Карточка аудирования с маскированным текстом (Listening)
-  Widget _buildListeningCard(AudioDrill drill, DrillSessionProvider session) {
+  /// Карточка экспресс-чтения и проговаривания (Shadowing / Reading)
+  Widget _buildListeningCard(AudioDrill drill, DrillSessionProvider session, SettingsProvider settings) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isPassed = session.status == DrillStatus.passed;
-    final isVisible = _revealListening || isPassed;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          'ТЫҢДАҢЫЗ ЖӘНЕ ҚАЙТАЛАҢЫЗ (АУДИРОВАНИЕ):',
-          style: TextStyle(
+        Text(
+          settings.label('ПРОЧТИТЕ И ПРОИЗНЕСИТЕ ВСЛУХ (SHADOWING):', 'ОҚЫП, ДАУЫСТАП АЙТЫҢЫЗ:'),
+          style: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
             color: Color(0xFFA78BFA),
@@ -575,106 +571,76 @@ class _DrillScreenState extends State<DrillScreen> {
         ),
         const SizedBox(height: 20),
 
-        // Большая центральная кнопка прослушивания
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-            backgroundColor: const Color(0xFF7C3AED),
+        // Поле казахской фразы и транскрипции
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: AppColors.teal.withAlpha(isDark ? 20 : 15),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.tealLight),
           ),
-          icon: const Icon(Icons.volume_up_rounded, size: 24, color: Colors.white),
-          label: const Text(
-            'Қайта тыңдау (Слушать еще раз)',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.white),
-          ),
-          onPressed: session.playTargetAudio,
-        ),
-        const SizedBox(height: 20),
-
-        // Поле маскированного / раскрытого текста и транскрипции
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: isVisible
-              ? Container(
-                  key: const ValueKey('revealed'),
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.teal.withAlpha(isDark ? 20 : 15),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.tealLight),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        drill.targetKk,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
-                          color: isDark ? AppColors.tealLight : AppColors.tealDark,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      if (drill.phoneticTranscription != null) ...[
-                        const SizedBox(height: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: (isDark ? Colors.white : Colors.black).withAlpha(10),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            '[ ${drill.phoneticTranscription} ]',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.w600,
-                              color: isDark ? AppColors.goldLight : AppColors.goldDark,
-                            ),
-                          ),
-                        ),
-                      ],
-                      if (drill.grammarNote != null) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          drill.grammarNote!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.textSecondary(context),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ],
-                  ),
-                )
-              : OutlinedButton.icon(
-                  key: const ValueKey('masked'),
-                  icon: const Icon(Icons.visibility_rounded, size: 18),
-                  label: const Text('Мәтін мен транскрипцияны көру (Показать)'),
-                  onPressed: () {
-                    setState(() {
-                      _revealListening = true;
-                    });
-                  },
+          child: Column(
+            children: [
+              Text(
+                drill.targetKk,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                  color: isDark ? AppColors.tealLight : AppColors.tealDark,
                 ),
+                textAlign: TextAlign.center,
+              ),
+              if (drill.phoneticTranscription != null || drill.targetKk.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: (isDark ? Colors.white : Colors.black).withAlpha(10),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    '[ ${drill.phoneticTranscription ?? drill.targetKk} ]',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? AppColors.goldLight : AppColors.goldDark,
+                    ),
+                  ),
+                ),
+              ],
+              if (drill.grammarNote != null) ...[
+                const SizedBox(height: 10),
+                Text(
+                  drill.grammarNote!,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary(context),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ],
+          ),
         ),
       ],
     );
   }
 
   /// Стандартная карточка речевого коммуникативного задания (Speech)
-  Widget _buildSpeechCard(AudioDrill drill, DrillSessionProvider session) {
+  Widget _buildSpeechCard(AudioDrill drill, DrillSessionProvider session, SettingsProvider settings) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          'АЙТЫҢЫЗ (СКАЖИТЕ ВСЛУХ):',
+        Text(
+          settings.label('СКАЖИТЕ ВСЛУХ (РЕЧЕВОЙ ДРИЛ):', 'ДАУЫСТАП АЙТЫҢЫЗ:'),
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w800,
-            color: AppColors.gold,
+            color: AppColors.goldAccent(context),
             letterSpacing: 1.0,
           ),
         ),
@@ -715,7 +681,7 @@ class _DrillScreenState extends State<DrillScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (drill.phoneticTranscription != null) ...[
+              if (drill.phoneticTranscription != null || drill.targetKk.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -724,7 +690,7 @@ class _DrillScreenState extends State<DrillScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    '[ ${drill.phoneticTranscription} ]',
+                    '[ ${drill.phoneticTranscription ?? drill.targetKk} ]',
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'monospace',
@@ -750,19 +716,15 @@ class _DrillScreenState extends State<DrillScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
-
-        // Кнопка прослушивания эталона
-        OutlinedButton.icon(
-          icon: const Icon(Icons.volume_up_rounded, color: AppColors.gold),
-          label: const Text('Үлгіні тыңдау (Послушать эталон)'),
-          onPressed: session.playTargetAudio,
-        ),
       ],
     );
   }
 
-  Widget _buildCelebrationScreen(BuildContext context, DrillSessionProvider session) {
+  Widget _buildCelebrationScreen(
+    BuildContext context,
+    DrillSessionProvider session,
+    SettingsProvider settings,
+  ) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -777,18 +739,21 @@ class _DrillScreenState extends State<DrillScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Керемет! Күн аяқталды!',
+              Text(
+                settings.label('Отлично! Урок дня завершен!', 'Керемет! Күн аяқталды!'),
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.gold,
+                  color: AppColors.goldAccent(context),
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'Сіз ${session.totalDrills} сөйлемді сәтті айтып шықтыңыз.\nЖаңа сөздер мен сөйлемдер интервалды қайталауға қосылды.',
+                settings.label(
+                  'Вы успешно отработали ${session.totalDrills} фраз вслух.\nНовые слова и фразы добавлены в интервальное повторение.',
+                  'Сіз ${session.totalDrills} сөйлемді сәтті айтып шықтыңыз.\nЖаңа сөздер мен сөйлемдер интервалды қайталауға қосылды.',
+                ),
                 style: TextStyle(
                   fontSize: 15,
                   color: AppColors.textSecondary(context),
@@ -799,9 +764,9 @@ class _DrillScreenState extends State<DrillScreen> {
               const SizedBox(height: 36),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text(
-                  'Басты бетке оралу (Отлично)',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                child: Text(
+                  settings.label('Вернуться на главную', 'Басты бетке оралу'),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                 ),
               ),
             ],

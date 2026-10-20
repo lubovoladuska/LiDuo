@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/kazakh_phonetics.dart';
 import '../../data/database/app_database.dart';
 import '../../data/models/audio_drill.dart';
+import '../../providers/settings_provider.dart';
 import '../../services/speech_service.dart';
-import '../../services/tts_service.dart';
 
 /// Экран свободной тренировочной сессии практики речи
 class DrillWorkoutScreen extends StatefulWidget {
@@ -33,10 +34,6 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
   bool _isFinished = false;
 
   AudioDrill get currentDrill => widget.drills[_currentIndex];
-
-  Future<void> _playAudio() async {
-    await TtsService.instance.speak(currentDrill.targetKk);
-  }
 
   Future<void> _startListening() async {
     setState(() {
@@ -121,8 +118,10 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+
     if (_isFinished) {
-      return _buildCompletionView();
+      return _buildCompletionView(settings);
     }
 
     final progress = (_currentIndex + 1) / widget.drills.length;
@@ -140,7 +139,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
               color: _showHint ? AppColors.gold : AppColors.textSecondary(context),
             ),
             onPressed: () => setState(() => _showHint = !_showHint),
-            tooltip: 'Көмек / Подсказка',
+            tooltip: settings.label('Подсказка', 'Көмек'),
           ),
         ],
       ),
@@ -176,7 +175,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                         children: [
                           if (currentDrill.type == DrillType.vocab) ...[
                             Text(
-                              'СӨЗДІК БАЗА (СЛОВО ДНЯ):',
+                              settings.label('СЛОВАРНАЯ БАЗА (СЛОВО ДНЯ):', 'СӨЗДІК БАЗА:'),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
@@ -225,7 +224,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                             ),
                           ] else if (currentDrill.type == DrillType.slotSubstitution) ...[
                             Text(
-                              'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:',
+                              settings.label('ПОДСТАВЬТЕ СЛОВО В ШАБЛОН:', 'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:'),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
@@ -255,7 +254,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                                   border: Border.all(color: AppColors.gold.withAlpha(50)),
                                 ),
                                 child: Text(
-                                  'Каркас: ${currentDrill.slotTemplate}',
+                                  settings.label('Шаблон / Каркас: ${currentDrill.slotTemplate}', 'Үлгі: ${currentDrill.slotTemplate}'),
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: AppColors.textSecondary(context),
@@ -274,7 +273,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                                   border: Border.all(color: AppColors.tealAccent(context)),
                                 ),
                                 child: Text(
-                                  'Слот: «${currentDrill.slotVariable}»',
+                                  '${settings.label('Слот', 'Слот')}: «${currentDrill.slotVariable}»',
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w800,
@@ -331,7 +330,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                             ),
                           ] else ...[
                             Text(
-                              'АЙТЫҢЫЗ (СКАЖИТЕ ВСЛУХ):',
+                              settings.label('СКАЖИТЕ ВСЛУХ (ПРОИЗНЕСИТЕ):', 'ДАУЫСТАП АЙТЫҢЫЗ:'),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
@@ -397,15 +396,6 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                               ),
                             ),
                           ],
-                          const SizedBox(height: 16),
-                          OutlinedButton.icon(
-                            icon: Icon(
-                              Icons.volume_up_rounded,
-                              color: AppColors.goldAccent(context),
-                            ),
-                            label: const Text('Үлгіні тыңдау (Эталон)'),
-                            onPressed: _playAudio,
-                          ),
                           if (_showHint && currentDrill.grammarNote != null) ...[
                             const SizedBox(height: 14),
                             Container(
@@ -462,10 +452,19 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                                 const SizedBox(width: 8),
                                 Text(
                                   _isPassed
-                                      ? 'Дұрыс! (${(_similarityScore * 100).toInt()}% сәйкестік)'
+                                      ? settings.label(
+                                          'Правильно! (${(_similarityScore * 100).toInt()}% совпадение)',
+                                          'Дұрыс! (${(_similarityScore * 100).toInt()}%)',
+                                        )
                                       : (_spokenText.isNotEmpty
-                                          ? 'Қайталап көріңіз (${(_similarityScore * 100).toInt()}%)'
-                                          : 'Тыңдап тұрмын... (Говорите)'),
+                                          ? settings.label(
+                                              'Повторите еще раз (${(_similarityScore * 100).toInt()}%)',
+                                              'Қайталап көріңіз (${(_similarityScore * 100).toInt()}%)',
+                                            )
+                                          : settings.label(
+                                              'Слушаю вас... (Говорите)',
+                                              'Тыңдап тұрмын... (Говорите)',
+                                            )),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     color: _isPassed
@@ -508,8 +507,8 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                         icon: const Icon(Icons.arrow_forward_rounded, size: 24),
                         label: Text(
                           _currentIndex + 1 < widget.drills.length
-                              ? 'Келесі сөйлем (Далее)'
-                              : 'Жаттығуды аяқтау (Завершить)',
+                              ? settings.label('Следующая фраза (Далее)', 'Келесі сөйлем')
+                              : settings.label('Завершить тренировку', 'Жаттығуды аяқтау'),
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                         ),
                         onPressed: _next,
@@ -522,7 +521,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                           TextButton(
                             onPressed: _manualPass,
                             child: Text(
-                              'Дұрыс айттым\n(Засчитать)',
+                              settings.label('Сказал правильно\n(Засчитать)', 'Дұрыс айттым'),
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context)),
                             ),
@@ -563,7 +562,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                           IconButton(
                             icon: const Icon(Icons.refresh_rounded, color: AppColors.gold),
                             onPressed: _startListening,
-                            tooltip: 'Қайталау',
+                            tooltip: settings.label('Повторить', 'Қайталау'),
                           ),
                       ],
                     ),
@@ -574,7 +573,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
     );
   }
 
-  Widget _buildCompletionView() {
+  Widget _buildCompletionView(SettingsProvider settings) {
     final percent = ((_correctCount / widget.drills.length) * 100).toInt();
 
     return Scaffold(
@@ -588,20 +587,26 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
               const Text('🎯', style: TextStyle(fontSize: 64), textAlign: TextAlign.center),
               const SizedBox(height: 16),
               Text(
-                'Жаттығу аяқталды!',
+                settings.label('Тренировка завершена!', 'Жаттығу аяқталды!'),
                 style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.goldAccent(context)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'Нәтиже: $_correctCount / ${widget.drills.length} сөйлем ($percent% дәлдік).\nСіздің сөйлеу дағдыңыз белсенді түрде дамып жатыр!',
+                settings.label(
+                  'Результат: $_correctCount из ${widget.drills.length} фраз ($percent% точность).\nВаш навык активной речи уверенно растет!',
+                  'Нәтиже: $_correctCount / ${widget.drills.length} сөйлем ($percent% дәлдік).\nСіздің сөйлеу дағдыңыз белсенді түрде дамып жатыр!',
+                ),
                 style: TextStyle(fontSize: 15, color: AppColors.textSecondary(context), height: 1.4),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 36),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Жаттығуларға оралу', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                child: Text(
+                  settings.label('Вернуться к тренировкам', 'Жаттығуларға оралу'),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                ),
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../providers/settings_provider.dart';
 
 /// Круговой индикатор готовности к разговорной речи
 class FluencyMeter extends StatelessWidget {
@@ -18,6 +20,7 @@ class FluencyMeter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final percent = (score / 100.0).clamp(0.0, 1.0);
+    final settings = context.watch<SettingsProvider>();
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -67,7 +70,7 @@ class FluencyMeter extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Сөйлеу деңгейі (Разговорная готовность)',
+                  settings.label('Разговорная готовность', 'Сөйлеу деңгейі'),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -76,15 +79,18 @@ class FluencyMeter extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  _getFluencyDescription(score),
+                  _getFluencyDescription(score, settings),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Өтілген күндер: $completedDays / $totalDays күн',
+                  settings.label(
+                    'Пройдено дней: $completedDays / $totalDays',
+                    'Өтілген күндер: $completedDays / $totalDays',
+                  ),
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.tealLight,
@@ -99,11 +105,19 @@ class FluencyMeter extends StatelessWidget {
     );
   }
 
-  String _getFluencyDescription(double score) {
-    if (score < 15) return 'A0: Алғашқы дыбыстар мен связкалар';
-    if (score < 35) return 'A1: Негізгі сұрақтар мен падеждер';
-    if (score < 65) return 'A2: Күнделікті еркін қарым-қатынас';
-    if (score < 85) return 'B1: Сенімді спонтанды сөйлеу';
-    return 'B2: Еркін және терең пікір алмасу';
+  String _getFluencyDescription(double score, SettingsProvider settings) {
+    if (score < 15) {
+      return settings.label('A0: Первые фразы и звуки', 'A0: Алғашқы дыбыстар мен связкалар');
+    }
+    if (score < 35) {
+      return settings.label('A1: Базовые вопросы и падежи', 'A1: Негізгі сұрақтар мен падеждер');
+    }
+    if (score < 65) {
+      return settings.label('A2: Уверенное бытовое общение', 'A2: Күнделікті еркін қарым-қатынас');
+    }
+    if (score < 85) {
+      return settings.label('B1: Свободная речь без барьера', 'B1: Сенімді спонтанды сөйлеу');
+    }
+    return settings.label('B2: Продвинутый уровень', 'B2: Еркін және терең пікір алмасу');
   }
 }

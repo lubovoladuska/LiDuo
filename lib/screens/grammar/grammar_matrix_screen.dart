@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/repositories/course_repository.dart';
-import '../../services/tts_service.dart';
+import '../../providers/settings_provider.dart';
 
 /// Интерактивный справочник грамматической матрицы и сингармонизма
 class GrammarMatrixScreen extends StatefulWidget {
@@ -41,18 +42,20 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Грамматикалық матрица'),
+        title: Text(settings.label('Матрица грамматики', 'Грамматикалық матрица')),
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.goldAccent(context),
           labelColor: AppColors.goldAccent(context),
           unselectedLabelColor: AppColors.textSecondary(context),
-          tabs: const [
-            Tab(text: '7 Падеж'),
-            Tab(text: 'Сингармонизм'),
-            Tab(text: 'Личные окончания'),
+          tabs: [
+            Tab(text: settings.label('7 Падежей', '7 Септік')),
+            Tab(text: settings.label('Сингармонизм', 'Үндестік')),
+            Tab(text: settings.label('Личные окончания', 'Жіктік жалғау')),
           ],
         ),
       ),
@@ -61,15 +64,15 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
           : TabBarView(
               controller: _tabController,
               children: [
-                _buildCasesTab(),
-                _buildHarmonyTab(),
-                _buildPersonalEndingsTab(),
+                _buildCasesTab(settings),
+                _buildHarmonyTab(settings),
+                _buildPersonalEndingsTab(settings),
               ],
             ),
     );
   }
 
-  Widget _buildCasesTab() {
+  Widget _buildCasesTab(SettingsProvider settings) {
     final List<dynamic> cases = _matrixData['cases'] as List<dynamic>? ?? [];
 
     return ListView.builder(
@@ -90,35 +93,22 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    item['name'] ?? '',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.goldAccent(context),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.volume_up, size: 20, color: AppColors.goldAccent(context)),
-                    onPressed: () {
-                      final ex = item['example']?.toString() ?? '';
-                      if (ex.isNotEmpty) TtsService.instance.speak(ex);
-                    },
-                    tooltip: 'Тыңдау',
-                  ),
-                ],
+              Text(
+                item['name'] ?? '',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.goldAccent(context),
+                ),
               ),
               const SizedBox(height: 6),
               Text(
-                'Сұрақтары: ${item['questions']}',
+                settings.label('Вопросы: ${item['questions']}', 'Сұрақтары: ${item['questions']}'),
                 style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context)),
               ),
               const SizedBox(height: 4),
               Text(
-                'Жалғаулары: ${item['endings']}',
+                settings.label('Окончания: ${item['endings']}', 'Жалғаулары: ${item['endings']}'),
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -133,7 +123,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'Мысалы: ${item['example']}',
+                  settings.label('Пример: ${item['example']}', 'Мысалы: ${item['example']}'),
                   style: const TextStyle(fontSize: 13, fontStyle: FontStyle.italic),
                 ),
               ),
@@ -144,7 +134,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
     );
   }
 
-  Widget _buildHarmonyTab() {
+  Widget _buildHarmonyTab(SettingsProvider settings) {
     final List<dynamic> rules = _matrixData['harmonyRules'] as List<dynamic>? ?? [];
 
     return ListView(
@@ -161,7 +151,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Закон сингармонизма (Үндестік заңы)',
+                settings.label('Закон сингармонизма', 'Үндестік заңы'),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.goldAccent(context)),
               ),
               const SizedBox(height: 6),
@@ -194,7 +184,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Дыбыстар: ${r['vowels']}',
+                  settings.label('Звуки: ${r['vowels']}', 'Дыбыстар: ${r['vowels']}'),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
@@ -209,7 +199,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Мысал: ${r['example']}',
+                  settings.label('Пример: ${r['example']}', 'Мысал: ${r['example']}'),
                   style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: AppColors.goldAccent(context)),
                 ),
               ],
@@ -220,7 +210,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
     );
   }
 
-  Widget _buildPersonalEndingsTab() {
+  Widget _buildPersonalEndingsTab(SettingsProvider settings) {
     final List<dynamic> endings = _matrixData['personalEndings'] as List<dynamic>? ?? [];
 
     return ListView.builder(
@@ -247,7 +237,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
               ),
               const SizedBox(height: 6),
               Text(
-                'Жалғаулары: ${item['endings']}',
+                settings.label('Окончания: ${item['endings']}', 'Жалғаулары: ${item['endings']}'),
                 style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
@@ -258,7 +248,7 @@ class _GrammarMatrixScreenState extends State<GrammarMatrixScreen> with SingleTi
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'Мысалы: ${item['example']}',
+                  settings.label('Пример: ${item['example']}', 'Мысалы: ${item['example']}'),
                   style: TextStyle(fontSize: 13, fontStyle: FontStyle.italic, color: AppColors.tealAccent(context)),
                 ),
               ),

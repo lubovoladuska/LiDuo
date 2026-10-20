@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../providers/settings_provider.dart';
-import '../../services/tts_service.dart';
 
 /// Экран настроек приложения
 class SettingsScreen extends StatefulWidget {
@@ -34,58 +33,85 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Баптаулар (Настройки)'),
+        title: Text(settings.label('Настройки', 'Баптаулар')),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          _buildSectionHeader('Интерфейс және визуал'),
+          _buildSectionHeader(context, settings.label('Внешний вид и язык', 'Сыртқы түрі мен тіл')),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.palette_outlined, color: AppColors.gold),
-            title: const Text('Қараңғы стиль (Nomad Dark)'),
-            subtitle: const Text('Степной модерн в графитовых тонах'),
+            leading: Icon(Icons.palette_outlined, color: AppColors.goldAccent(context)),
+            title: Text(settings.label('Темная тема', 'Қараңғы стиль')),
+            subtitle: const Text('Стиль Nomad Luxe (графит и золото)'),
             trailing: Switch(
               value: settings.isDark,
               activeThumbColor: AppColors.gold,
               onChanged: (_) => settings.toggleTheme(),
             ),
           ),
-
-          const Divider(height: 32),
-
-          _buildSectionHeader('Дыбыс және синтез (TTS)'),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.speed, color: AppColors.gold),
-            title: const Text('Сөйлеу жылдамдығы (Темп речи)'),
-            subtitle: Text('${(settings.speechRate * 100).toInt()}% қалыпты жылдамдықтан'),
-          ),
-          Slider(
-            value: settings.speechRate,
-            min: 0.6,
-            max: 1.2,
-            divisions: 6,
-            activeColor: AppColors.gold,
-            label: '${settings.speechRate.toStringAsFixed(2)}x',
-            onChanged: (val) => settings.setSpeechRate(val),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              icon: const Icon(Icons.play_circle_outline, color: AppColors.gold),
-              label: const Text('Сөйлеуді тексеру: «Сәлеметсіз бе, қалың қалай?»'),
-              onPressed: () {
-                TtsService.instance.speak('Сәлеметсіз бе, қалың қалай?');
-              },
+            leading: Icon(Icons.translate_rounded, color: AppColors.goldAccent(context)),
+            title: Text(settings.label('Казахские названия в скобках', 'Қазақша атауларды көрсету')),
+            subtitle: Text(
+              settings.showKazakhSubtitles
+                  ? 'Включено: пункты меню дублируются, например «Главная (Басты бет)»'
+                  : 'Отключено: только на русском языке («Главная», «Практика»)',
+              style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context)),
+            ),
+            trailing: Switch(
+              value: settings.showKazakhSubtitles,
+              activeThumbColor: AppColors.gold,
+              onChanged: (val) => settings.setShowKazakhSubtitles(val),
             ),
           ),
 
           const Divider(height: 32),
 
-          _buildSectionHeader('ИИ-Серіктес (Gemini API / Опционально)'),
+          _buildSectionHeader(context, settings.label('Синтез речи (Озвучка)', 'Дыбыс және синтез')),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              settings.ttsEnabled ? Icons.volume_up_outlined : Icons.volume_off_outlined,
+              color: settings.ttsEnabled ? AppColors.goldAccent(context) : AppColors.textSecondary(context),
+            ),
+            title: Text(settings.label('Озвучивание текста (TTS)', 'Мәтінді дыбыстау')),
+            subtitle: Text(
+              settings.ttsEnabled
+                  ? 'Включено (системный синтезатор речи)'
+                  : 'Отключено (рекомендуется ориентироваться на транскрипцию [ ... ])',
+              style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context)),
+            ),
+            trailing: Switch(
+              value: settings.ttsEnabled,
+              activeThumbColor: AppColors.gold,
+              onChanged: (val) => settings.setTtsEnabled(val),
+            ),
+          ),
+          if (settings.ttsEnabled) ...[
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(Icons.speed, color: AppColors.goldAccent(context)),
+              title: Text(settings.label('Темп речи', 'Сөйлеу жылдамдығы')),
+              subtitle: Text('${(settings.speechRate * 100).toInt()}% от нормы'),
+            ),
+            Slider(
+              value: settings.speechRate,
+              min: 0.6,
+              max: 1.2,
+              divisions: 6,
+              activeColor: AppColors.gold,
+              label: '${settings.speechRate.toStringAsFixed(2)}x',
+              onChanged: (val) => settings.setSpeechRate(val),
+            ),
+          ],
+
+          const Divider(height: 32),
+
+          _buildSectionHeader(context, settings.label('ИИ-Собеседник (Gemini API)', 'ИИ-Серіктес')),
           Text(
-            'Приложение полностью автономно и работает оффлайн. Если вы хотите вести свободные диалоги с ИИ-партнером, укажите бесплатный ключ Gemini API.',
+            'Приложение полностью автономно и работает 100% оффлайн. Если вы хотите вести свободные диалоги с ИИ-партнером, укажите бесплатный ключ Gemini API.',
             style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context), height: 1.4),
           ),
           const SizedBox(height: 14),
@@ -98,14 +124,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.gold, width: 1.5),
+                borderSide: BorderSide(color: AppColors.goldAccent(context), width: 1.5),
               ),
               suffixIcon: IconButton(
-                icon: const Icon(Icons.save, color: AppColors.gold),
+                icon: Icon(Icons.save, color: AppColors.goldAccent(context)),
                 onPressed: () {
                   settings.setGeminiApiKey(_apiKeyController.text);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('API кілті сақталды!')),
+                    SnackBar(content: Text(settings.label('API ключ сохранен!', 'API кілті сақталды!'))),
                   );
                 },
               ),
@@ -114,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const Divider(height: 32),
 
-          _buildSectionHeader('Жоба туралы (О проекте LiDuo)'),
+          _buildSectionHeader(context, settings.label('О проекте LiDuo', 'Жоба туралы')),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -133,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Бескомпромиссно эффективная открытая система обучения казахскому языку.\nСоздано с заботой о развитии разговорной речи.',
+                  'Бескомпромиссно эффективная открытая система обучения казахскому языку.\nСоздано с заботой о развитии активной разговорной речи.',
                   style: TextStyle(fontSize: 13, color: AppColors.textSecondary(context), height: 1.4),
                 ),
               ],
@@ -144,15 +170,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w800,
-          color: AppColors.gold,
+          color: AppColors.goldAccent(context),
         ),
       ),
     );

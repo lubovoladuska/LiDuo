@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../providers/settings_provider.dart';
 import '../../services/ai_partner_service.dart';
 import '../../services/speech_service.dart';
-import '../../services/tts_service.dart';
 import '../settings/settings_screen.dart';
 
 /// Экран интерактивного ролевого диалога с ИИ-партнером (Gemini)
@@ -82,7 +83,6 @@ class _AiChatScreenState extends State<AiChatScreen> {
         _isSending = false;
       });
       _scrollToBottom();
-      TtsService.instance.speak(response);
     }
   }
 
@@ -105,15 +105,19 @@ class _AiChatScreenState extends State<AiChatScreen> {
   @override
   Widget build(BuildContext context) {
     final hasKey = AiPartnerService.instance.hasApiKey;
+    final settings = context.watch<SettingsProvider>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ИИ-Сұхбаттас (AI Partner)'),
+        title: Text(settings.label('ИИ-Собеседник', 'ИИ-Сұхбаттас')),
         actions: [
           if (!hasKey)
             TextButton.icon(
               icon: const Icon(Icons.key, size: 16, color: AppColors.gold),
-              label: const Text('API кілті', style: TextStyle(color: AppColors.gold, fontSize: 12)),
+              label: Text(
+                settings.label('API-ключ', 'API кілті'),
+                style: const TextStyle(color: AppColors.gold, fontSize: 12),
+              ),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const SettingsScreen()),
@@ -133,13 +137,13 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildScenarioChip('🚕 Такси', 'Сәлеметсіз бе! Осы жерден тоқтаңызшы.'),
+                    _buildScenarioChip(settings.label('🚕 Такси'), 'Сәлеметсіз бе! Осы жерден тоқтаңызшы.'),
                     const SizedBox(width: 8),
-                    _buildScenarioChip('🍏 Базар', 'Бұл алма қанша тұрады? Біраз түсіріп бересіз бе?'),
+                    _buildScenarioChip(settings.label('🍏 Рынок', 'Базар'), 'Бұл алма қанша тұрады? Біраз түсіріп бересіз бе?'),
                     const SizedBox(width: 8),
-                    _buildScenarioChip('☕ Дәмхана', 'Бір шай мен бауырсақ әкеліңізші.'),
+                    _buildScenarioChip(settings.label('☕ Кафе', 'Дәмхана'), 'Бір шай мен бауырсақ әкеліңізші.'),
                     const SizedBox(width: 8),
-                    _buildScenarioChip('🤝 Танысу', 'Сәлеметсіз бе, сіздің атыңыз кім?'),
+                    _buildScenarioChip(settings.label('🤝 Знакомство', 'Танысу'), 'Сәлеметсіз бе, сіздің атыңыз кім?'),
                   ],
                 ),
               ),
@@ -184,13 +188,13 @@ class _AiChatScreenState extends State<AiChatScreen> {
                       color: _isListening ? AppColors.error : AppColors.gold,
                     ),
                     onPressed: _toggleMic,
-                    tooltip: 'Дауыспен айту (Голосовой ввод)',
+                    tooltip: settings.label('Голосовой ввод', 'Дауыспен айту'),
                   ),
                   Expanded(
                     child: TextField(
                       controller: _textController,
-                      decoration: const InputDecoration(
-                        hintText: 'Қазақша жазыңыз немесе айтыңыз...',
+                      decoration: InputDecoration(
+                        hintText: settings.label('Напишите или продиктуйте по-казахски...', 'Қазақша жазыңыз немесе айтыңыз...'),
                         border: InputBorder.none,
                       ),
                       onSubmitted: (val) => _sendMessage(),
@@ -242,33 +246,13 @@ class _AiChatScreenState extends State<AiChatScreen> {
             width: 1,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              msg.text,
-              style: TextStyle(
-                fontSize: 15,
-                color: msg.isUser ? AppColors.darkBackground : null,
-                fontWeight: msg.isUser ? FontWeight.w700 : FontWeight.w500,
-              ),
-            ),
-            if (!msg.isUser) ...[
-              const SizedBox(height: 8),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.volume_up, size: 18, color: AppColors.gold),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () => TtsService.instance.speak(msg.text),
-                    tooltip: 'Тыңдау',
-                  ),
-                ],
-              ),
-            ],
-          ],
+        child: Text(
+          msg.text,
+          style: TextStyle(
+            fontSize: 15,
+            color: msg.isUser ? AppColors.darkBackground : null,
+            fontWeight: msg.isUser ? FontWeight.w700 : FontWeight.w500,
+          ),
         ),
       ),
     );

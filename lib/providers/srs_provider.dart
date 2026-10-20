@@ -39,9 +39,6 @@ class SrsProvider extends ChangeNotifier {
 
   void flipCard() {
     _isFlipped = !_isFlipped;
-    if (_isFlipped && currentCard != null) {
-      TtsService.instance.speak(currentCard!.backTarget);
-    }
     notifyListeners();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/srs_calculator.dart';
+import '../../providers/settings_provider.dart';
 import '../../providers/srs_provider.dart';
 import '../../providers/stats_provider.dart';
 
@@ -26,20 +27,21 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
   Widget build(BuildContext context) {
     final srs = context.watch<SrsProvider>();
     final stats = context.read<StatsProvider>();
+    final settings = context.watch<SettingsProvider>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Интервалды қайталау (SRS)'),
+        title: Text(settings.label('Интервальное повторение (SRS)', 'Интервалды қайталау')),
       ),
       body: srs.isLoading
           ? const Center(child: CircularProgressIndicator(color: AppColors.gold))
           : srs.dueCards.isEmpty || srs.currentCard == null
-              ? _buildEmptyState(context)
-              : _buildReviewContent(context, srs, stats),
+              ? _buildEmptyState(context, settings)
+              : _buildReviewContent(context, srs, stats, settings),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, SettingsProvider settings) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -49,7 +51,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
             const Text('🌟', style: TextStyle(fontSize: 64)),
             const SizedBox(height: 16),
             Text(
-              'Бүгінге қайталайтын карточка жоқ!',
+              settings.label('На сегодня нет карточек для повторения!', 'Бүгінге қайталайтын карточка жоқ!'),
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
@@ -59,7 +61,10 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Сіз барлық карточкаларды жаттадыңыз. Жаңа карточкалар күнделікті сабақтардан кейін қосылады.',
+              settings.label(
+                'Вы повторили все карточки. Новые слова и фразы добавятся автоматически после уроков дня.',
+                'Сіз барлық карточкаларды жаттадыңыз. Жаңа карточкалар күнделікті сабақтардан кейін қосылады.',
+              ),
               style: TextStyle(
                 fontSize: 14,
                 color: AppColors.textSecondary(context),
@@ -70,7 +75,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Басты бетке оралу'),
+              child: Text(settings.label('Вернуться на главную', 'Басты бетке оралу')),
             ),
           ],
         ),
@@ -82,6 +87,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
     BuildContext context,
     SrsProvider srs,
     StatsProvider stats,
+    SettingsProvider settings,
   ) {
     final card = srs.currentCard!;
 
@@ -96,7 +102,10 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Карточка: ${srs.currentIndex + 1} / ${srs.dueCount}',
+                  settings.label(
+                    'Карточка: ${srs.currentIndex + 1} из ${srs.dueCount}',
+                    'Карточка: ${srs.currentIndex + 1} / ${srs.dueCount}',
+                  ),
                   style: TextStyle(
                     fontSize: 14,
                     color: AppColors.textSecondary(context),
@@ -110,7 +119,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    'Интервал: ${card.intervalDays} к.',
+                    settings.label('Интервал: ${card.intervalDays} дн.', 'Интервал: ${card.intervalDays} к.'),
                     style: TextStyle(
                       fontSize: 11,
                       color: AppColors.goldAccent(context),
@@ -148,7 +157,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'ЕСКЕ ТҮСІРІҢІЗ ЖӘНЕ АЙТЫҢЫЗ:',
+                        settings.label('ВСПОМНИТЕ И СКАЖИТЕ ВСЛУХ:', 'ЕСКЕ ТҮСІРІҢІЗ ЖӘНЕ АЙТЫҢЫЗ:'),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
@@ -175,7 +184,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                             Icon(Icons.touch_app, size: 18, color: AppColors.goldAccent(context)),
                             const SizedBox(width: 8),
                             Text(
-                              'Төңкеру үшін басыңыз (Показать ответ)',
+                              settings.label('Нажмите для показа ответа', 'Төңкеру үшін басыңыз'),
                               style: TextStyle(
                                 fontSize: 13,
                                 color: AppColors.goldAccent(context),
@@ -193,20 +202,14 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                         Text(
                           card.backTarget,
                           style: TextStyle(
-                            fontSize: 26,
+                            fontSize: 28,
                             fontWeight: FontWeight.w900,
                             color: AppColors.goldAccent(context),
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 12),
-                        IconButton(
-                          icon: Icon(Icons.volume_up_rounded, color: AppColors.goldAccent(context), size: 28),
-                          onPressed: srs.playAudio,
-                          tooltip: 'Тыңдау',
-                        ),
                         if (card.note != null) ...[
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           Text(
                             card.note!,
                             style: TextStyle(
@@ -232,7 +235,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                   Expanded(
                     child: _buildGradeButton(
                       context,
-                      label: 'Қайталау\n(Забыл)',
+                      label: settings.label('Забыл', 'Қайта'),
                       color: AppColors.error,
                       onTap: () => srs.rateCard(SrsGrade.again, stats),
                     ),
@@ -241,7 +244,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                   Expanded(
                     child: _buildGradeButton(
                       context,
-                      label: 'Қиын\n(С трудом)',
+                      label: settings.label('Трудно', 'Қиын'),
                       color: AppColors.warning,
                       onTap: () => srs.rateCard(SrsGrade.hard, stats),
                     ),
@@ -250,7 +253,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                   Expanded(
                     child: _buildGradeButton(
                       context,
-                      label: 'Жақсы\n(Хорошо)',
+                      label: settings.label('Хорошо', 'Жақсы'),
                       color: AppColors.tealLight,
                       onTap: () => srs.rateCard(SrsGrade.good, stats),
                     ),
@@ -259,7 +262,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
                   Expanded(
                     child: _buildGradeButton(
                       context,
-                      label: 'Оңай\n(Легко)',
+                      label: settings.label('Легко', 'Оңай'),
                       color: AppColors.success,
                       onTap: () => srs.rateCard(SrsGrade.easy, stats),
                     ),
@@ -269,7 +272,7 @@ class _SrsReviewScreenState extends State<SrsReviewScreen> {
             else
               ElevatedButton(
                 onPressed: srs.flipCard,
-                child: const Text('Жауабын тексеру (Проверить себя)'),
+                child: Text(settings.label('Показать ответ (Проверить себя)', 'Жауабын тексеру')),
               ),
           ],
         ),

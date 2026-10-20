@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/database/app_database.dart';
 import '../../data/models/audio_drill.dart';
 import '../../data/repositories/course_repository.dart';
+import '../../providers/settings_provider.dart';
 import '../../providers/stats_provider.dart';
 import 'drill_workout_screen.dart';
 
@@ -38,7 +39,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
   void _launchWorkout(List<AudioDrill> drills, String title) {
     if (drills.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Бұл санатта жаттығулар табылмады')),
+        const SnackBar(content: Text('В этой категории упражнений пока нет')),
       );
       return;
     }
@@ -59,7 +60,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
       completedDays: stats.completedDays,
       count: count,
     );
-    _launchWorkout(drills, 'Спринт $count сөйлем');
+    _launchWorkout(drills, 'Спринт ($count фраз)');
   }
 
   Future<void> _startSlotMatrix() async {
@@ -85,7 +86,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     if (weakAttempts.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Керемет! Сізде қате орындалған сөйлемдер жоқ.')),
+          const SnackBar(content: Text('Отлично! У вас нет неисправленных ошибок.')),
         );
       }
       return;
@@ -103,27 +104,29 @@ class _PracticeScreenState extends State<PracticeScreen> {
           AudioDrill(
             id: drillId,
             step: 1,
-            promptRu: 'Қайталап, дұрыс айтыңыз:',
+            promptRu: 'Повторите и произнесите чисто:',
             targetKk: target,
-            grammarNote: 'Қателермен жұмыс',
+            grammarNote: 'Работа над ошибками',
           ),
         );
       }
     }
 
-    _launchWorkout(weakDrills, 'Қателермен жұмыс');
+    _launchWorkout(weakDrills, 'Работа над ошибками');
   }
 
   Future<void> _startDayPractice(int dayNumber) async {
     final lesson = await CourseRepository.instance.getLessonForDay(dayNumber);
-    _launchWorkout(lesson.drills, '$dayNumber-күн жаттығуы');
+    _launchWorkout(lesson.drills, 'Практика: День $dayNumber');
   }
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Сөйлеу жаттығулары (Практика)'),
+        title: Text(settings.label('Практика и тренажеры', 'Сөйлеу жаттығулары')),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: AppColors.gold))
@@ -157,13 +160,16 @@ class _PracticeScreenState extends State<PracticeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Еркін сөйлеу бұлшықеті',
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
+                            Text(
+                              settings.label('Мышца свободной речи', 'Еркін сөйлеу бұлшықеті'),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Қосымша 10–15 минут еркін сөйлеу сөздік қор мен тілдік реакцияны 3 есе жылдамдатады.',
+                              settings.label(
+                                'Дополнительные 10–15 минут практики ускоряют словарный запас и реакцию речи в 3 раза.',
+                                'Қосымша 10–15 минут еркін сөйлеу тілдік реакцияны 3 есе жылдамдатады.',
+                              ),
                               style: TextStyle(fontSize: 12, color: AppColors.textSecondary(context), height: 1.3),
                             ),
                           ],
@@ -175,17 +181,17 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
                 const SizedBox(height: 24),
 
-                const Text(
-                  'Жылдам режимдер',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                Text(
+                  settings.label('Быстрые режимы', 'Жылдам режимдер'),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 12),
 
                 // Карточка Экспресс-спринта 10 фраз
                 _buildWorkoutCard(
                   context,
-                  title: '⚡ Экспресс-спринт (10 сөйлем)',
-                  subtitle: 'Жылдам 3–5 минуттық дауыстап сөйлеу жаттығуы',
+                  title: settings.label('⚡ Экспресс-спринт (10 фраз)', '⚡ Экспресс-спринт (10 сөйлем)'),
+                  subtitle: settings.label('Быстрая 3–5 минутная разминка речи вслух', 'Жылдам 3–5 минуттық дауыстап сөйлеу'),
                   badge: '3-5 мин',
                   badgeColor: AppColors.gold,
                   onTap: () => _startQuickSprint(10),
@@ -196,9 +202,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 // Карточка Словарного спринта
                 _buildWorkoutCard(
                   context,
-                  title: '📚 Словарный спринт (Vocab Blitz)',
-                  subtitle: 'Быстрый речевой прогон активного запаса слов',
-                  badge: '12 сөз',
+                  title: settings.label('📚 Словарный спринт (Vocab Blitz)', '📚 Сөздік спринт'),
+                  subtitle: settings.label('Быстрый прогон активного словарного запаса', 'Сөздік қорды дауыстап бекіту'),
+                  badge: settings.label('12 слов', '12 сөз'),
                   badgeColor: AppColors.tealLight,
                   onTap: _startVocabBlitz,
                 ),
@@ -208,9 +214,9 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 // Карточка Подстановочного тренажера
                 _buildWorkoutCard(
                   context,
-                  title: '🧩 Подстановочный тренажер (Slot Matrix)',
-                  subtitle: 'Отработка быстрой подстановки в грамматические слоты',
-                  badge: '12 слотов',
+                  title: settings.label('🧩 Подстановочный тренажер (Slot Matrix)', '🧩 Қалып тренажері'),
+                  subtitle: settings.label('Отработка быстрой подстановки в грамматические слоты', 'Грамматикалық қалыптарға жылдам қою'),
+                  badge: settings.label('12 слотов', '12 қалып'),
                   badgeColor: AppColors.goldAccent(context),
                   onTap: _startSlotMatrix,
                 ),
@@ -220,8 +226,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 // Карточка Интенсивного марафона 25 фраз
                 _buildWorkoutCard(
                   context,
-                  title: '🔥 Интенсив-марафон (25 сөйлем)',
-                  subtitle: 'Өтілген барлық материалды микс түрінде қайталау',
+                  title: settings.label('🔥 Интенсив-марафон (25 фраз)', '🔥 Интенсив-марафон (25 сөйлем)'),
+                  subtitle: settings.label('Микс-тренировка всего пройденного материала', 'Өтілген материалды аралас қайталау'),
                   badge: '10 мин',
                   badgeColor: AppColors.tealLight,
                   onTap: () => _startQuickSprint(25),
@@ -232,20 +238,20 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 // Карточка работы над ошибками
                 _buildWorkoutCard(
                   context,
-                  title: '🎯 Қателермен жұмыс',
+                  title: settings.label('🎯 Работа над ошибками', '🎯 Қателермен жұмыс'),
                   subtitle: _weakDrillsCount > 0
-                      ? 'Түзелмеген $_weakDrillsCount сөйлем бар'
-                      : 'Барлық сөйлемдер таза айтылды!',
-                  badge: '$_weakDrillsCount қате',
+                      ? settings.label('Фраз для исправления: $_weakDrillsCount', 'Түзелмеген $_weakDrillsCount сөйлем бар')
+                      : settings.label('Все фразы произнесены чисто!', 'Барлық сөйлемдер таза айтылды!'),
+                  badge: settings.label('$_weakDrillsCount ошибок', '$_weakDrillsCount қате'),
                   badgeColor: _weakDrillsCount > 0 ? AppColors.warning : AppColors.success,
                   onTap: _startMistakeReview,
                 ),
 
                 const SizedBox(height: 28),
 
-                const Text(
-                  'Тақырыптар бойынша жаттығу',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                Text(
+                  settings.label('Тренировка по урокам недели', 'Тақырыптар бойынша жаттығу'),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 12),
 
@@ -284,7 +290,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                       ),
                       subtitle: Text(
-                        '10–12 речевых дрилов',
+                        settings.label('10–12 речевых дрилов', '10–12 сөйлем'),
                         style: TextStyle(fontSize: 11, color: AppColors.textSecondary(context)),
                       ),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.gold),

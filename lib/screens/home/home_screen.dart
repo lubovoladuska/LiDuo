@@ -95,12 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(width: 10),
-            Text(
-              '90 күнде еркін сөйлеу',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary(context),
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Text(
+                settingsProvider.label('Свободная речь за 90 дней', '90 күнде еркін сөйлеу'),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textSecondary(context),
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -169,9 +173,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 24),
 
                     // Сетка быстрых модулей
-                    const Text(
-                      'Модули обучения',
-                      style: TextStyle(
+                    Text(
+                      settingsProvider.label('Модули обучения', 'Оқу модульдері'),
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                       ),
@@ -183,8 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: _buildNavigationCard(
                             context,
-                            title: 'Дорожная карта',
-                            subtitle: '90 дней • 12 недель',
+                            title: settingsProvider.label('Дорожная карта', 'Бағдарлама'),
+                            subtitle: settingsProvider.label('90 дней • 12 недель', '12 апталық жоспар'),
                             icon: Icons.map_outlined,
                             badge: '${statsProvider.completedDays.length}/90',
                             badgeColor: AppColors.gold,
@@ -201,8 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: _buildNavigationCard(
                             context,
-                            title: 'Повторение SRS',
-                            subtitle: 'Интервальная память',
+                            title: settingsProvider.label('Повторение слов', 'Интервалды қайталау'),
+                            subtitle: settingsProvider.label('Интервальная память', 'Жадтағы карточкалар'),
                             icon: Icons.psychology_outlined,
                             badge: '${srsProvider.dueCount}',
                             badgeColor: srsProvider.dueCount > 0
@@ -227,8 +231,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: _buildNavigationCard(
                             context,
-                            title: 'Матрица грамматики',
-                            subtitle: 'Сингармонизм • 7 падежей',
+                            title: settingsProvider.label('Матрица грамматики', 'Грамматикалық матрица'),
+                            subtitle: settingsProvider.label('Сингармонизм • 7 падежей', '7 септік пен үндестік'),
                             icon: Icons.menu_book_outlined,
                             badge: '7 падежей',
                             badgeColor: AppColors.tealLight,
@@ -245,8 +249,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Expanded(
                           child: _buildNavigationCard(
                             context,
-                            title: 'ИИ-собеседник',
-                            subtitle: 'Ролевые диалоги',
+                            title: settingsProvider.label('ИИ-Собеседник', 'ИИ-Серіктес'),
+                            subtitle: settingsProvider.label('Ролевые диалоги', 'Еркін сұхбаттасу'),
                             icon: Icons.smart_toy_outlined,
                             badge: 'Gemini',
                             badgeColor: AppColors.gold,
@@ -271,6 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPracticePromoCard(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
     return InkWell(
       onTap: () {
         Navigator.of(context).push(
@@ -303,16 +308,19 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Сөйлеу жаттығулары (Тренажер речи)',
-                    style: TextStyle(
+                  Text(
+                    settings.label('Тренажеры свободной речи', 'Сөйлеу жаттығулары'),
+                    style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Экспресс-спринты, работа над ошибками и практика по темам',
+                    settings.label(
+                      'Экспресс-спринты, матрица подстановок и работа над ошибками',
+                      'Спринттер, қалыптар мен қатемен жұмыс',
+                    ),
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.textSecondary(context),
@@ -330,6 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSprintHeroCard(BuildContext context, DayLesson lesson) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final settings = context.watch<SettingsProvider>();
 
     return Container(
       padding: const EdgeInsets.all(22),
@@ -368,7 +377,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  'КҮН ${lesson.dayNumber} • АПТА ${lesson.weekNumber}',
+                  settings.label(
+                    'ДЕНЬ ${lesson.dayNumber} • НЕДЕЛЯ ${lesson.weekNumber}',
+                    'КҮН ${lesson.dayNumber} • АПТА ${lesson.weekNumber}',
+                  ),
                   style: TextStyle(
                     color: isDark ? AppColors.darkBackground : Colors.white,
                     fontWeight: FontWeight.w800,
@@ -386,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    '20 мин • Говорение вслух',
+                    settings.label('20 мин • Говорение вслух', '20 мин • Дауыстап сөйлеу'),
                     style: TextStyle(
                       fontSize: 12,
                       color: isDark ? AppColors.goldLight : AppColors.goldDark,
@@ -430,9 +442,9 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             child: ElevatedButton.icon(
               icon: const Icon(Icons.play_arrow_rounded, size: 28),
-              label: const Text(
-                'Бастау (Начать речевой спринт)',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              label: Text(
+                settings.label('Начать речевой спринт', 'Речевой спринтті бастау'),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
               ),
               onPressed: () => _startSprint(lesson),
             ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/repositories/course_repository.dart';
 import '../../providers/drill_session_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../providers/stats_provider.dart';
 import '../drill/drill_screen.dart';
 
@@ -13,10 +14,11 @@ class RoadmapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stats = context.watch<StatsProvider>();
+    final settings = context.watch<SettingsProvider>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Жол картасы (90 Күн)'),
+        title: Text(settings.label('Дорожная карта (90 Дней)', 'Жол картасы (90 Күн)')),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -24,31 +26,31 @@ class RoadmapScreen extends StatelessWidget {
           _buildPhaseHeader(
             context,
             phaseNumber: 'I',
-            title: 'Фундамент және Падеждер (A0 -> A1)',
-            weeks: '1–4 Апталар (1–28 Күндер)',
+            title: settings.label('Фундамент и Падежи (A0 -> A1)', 'Фундамент және Падеждер'),
+            weeks: settings.label('1–4 Недели (1–28 Дни)', '1–4 Апталар (1–28 Күндер)'),
             color: AppColors.gold,
           ),
-          ...List.generate(4, (index) => _buildWeekSection(context, stats, weekNum: index + 1)),
+          ...List.generate(4, (index) => _buildWeekSection(context, stats, settings, weekNum: index + 1)),
 
           const SizedBox(height: 24),
           _buildPhaseHeader(
             context,
             phaseNumber: 'II',
-            title: 'Шақтар және Күнделікті өмір (A1 -> A2)',
-            weeks: '5–8 Апталар (29–56 Күндер)',
+            title: settings.label('Времена и Повседневность (A1 -> A2)', 'Шақтар және Күнделікті өмір'),
+            weeks: settings.label('5–8 Недели (29–56 Дни)', '5–8 Апталар (29–56 Күндер)'),
             color: AppColors.tealLight,
           ),
-          ...List.generate(4, (index) => _buildWeekSection(context, stats, weekNum: index + 5)),
+          ...List.generate(4, (index) => _buildWeekSection(context, stats, settings, weekNum: index + 5)),
 
           const SizedBox(height: 24),
           _buildPhaseHeader(
             context,
             phaseNumber: 'III',
-            title: 'Еркін сөйлеу және Тереңдік (A2 -> B1/B2)',
-            weeks: '9–12 Апталар (57–90 Күндер)',
+            title: settings.label('Свободная речь и Уверенность (A2 -> B1/B2)', 'Еркін сөйлеу және Тереңдік'),
+            weeks: settings.label('9–12 Недели (57–90 Дни)', '9–12 Апталар (57–90 Күндер)'),
             color: Colors.purpleAccent,
           ),
-          ...List.generate(4, (index) => _buildWeekSection(context, stats, weekNum: index + 9)),
+          ...List.generate(4, (index) => _buildWeekSection(context, stats, settings, weekNum: index + 9)),
           const SizedBox(height: 32),
         ],
       ),
@@ -119,7 +121,8 @@ class RoadmapScreen extends StatelessWidget {
 
   Widget _buildWeekSection(
     BuildContext context,
-    StatsProvider stats, {
+    StatsProvider stats,
+    SettingsProvider settings, {
     required int weekNum,
   }) {
     final startDay = (weekNum - 1) * 7 + 1;
@@ -139,7 +142,10 @@ class RoadmapScreen extends StatelessWidget {
         initiallyExpanded: weekNum == 1 || stats.currentDay >= startDay && stats.currentDay <= endDay,
         shape: const Border(),
         title: Text(
-          '$weekNum-Апта ($startDay–$endDay күндер)',
+          settings.label(
+            '$weekNum-я Неделя (Дни $startDay–$endDay)',
+            '$weekNum-Апта ($startDay–$endDay күндер)',
+          ),
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
         ),
         subtitle: Text(
@@ -149,7 +155,7 @@ class RoadmapScreen extends StatelessWidget {
         children: [
           const Divider(height: 1),
           for (int d = startDay; d <= endDay; d++)
-            _buildDayTile(context, stats, dayNumber: d),
+            _buildDayTile(context, stats, settings, dayNumber: d),
         ],
       ),
     );
@@ -157,7 +163,8 @@ class RoadmapScreen extends StatelessWidget {
 
   Widget _buildDayTile(
     BuildContext context,
-    StatsProvider stats, {
+    StatsProvider stats,
+    SettingsProvider settings, {
     required int dayNumber,
   }) {
     final isCompleted = stats.completedDays.contains(dayNumber);
@@ -193,7 +200,7 @@ class RoadmapScreen extends StatelessWidget {
               ),
       ),
       title: Text(
-        'Күн $dayNumber: ${_getDayTitle(dayNumber)}',
+        settings.label('День $dayNumber: ${_getDayTitle(dayNumber)}', 'Күн $dayNumber'),
         style: TextStyle(
           fontSize: 13,
           fontWeight: isCurrent ? FontWeight.w800 : FontWeight.w600,
@@ -207,9 +214,9 @@ class RoadmapScreen extends StatelessWidget {
                 color: AppColors.goldAccent(context),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: const Text(
-                'Бүгін',
-                style: TextStyle(
+              child: Text(
+                settings.label('Сегодня', 'Бүгін'),
+                style: const TextStyle(
                   color: AppColors.darkBackground,
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
