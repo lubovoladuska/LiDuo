@@ -174,25 +174,133 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                       ),
                       child: Column(
                         children: [
-                          const Text(
-                            'АЙТЫҢЫЗ (СКАЖИТЕ ВСЛУХ):',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textSecondaryDark,
-                              letterSpacing: 1.0,
+                          if (currentDrill.type == DrillType.vocab) ...[
+                            const Text(
+                              'СӨЗДІК БАЗА (СЛОВО ДНЯ):',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.tealLight,
+                                letterSpacing: 1.0,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            currentDrill.promptRu,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              height: 1.3,
+                            const SizedBox(height: 14),
+                            Text(
+                              currentDrill.targetKk,
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.goldLight,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
+                            if (currentDrill.phoneticTranscription != null) ...[
+                              const SizedBox(height: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withAlpha(10),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '[ ${currentDrill.phoneticTranscription} ]',
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: 'monospace',
+                                    color: AppColors.textSecondaryDark,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 12),
+                            Text(
+                              currentDrill.promptRu,
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ] else if (currentDrill.type == DrillType.slotSubstitution) ...[
+                            const Text(
+                              'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.gold,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              currentDrill.promptRu,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                height: 1.3,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            if (currentDrill.slotTemplate != null) ...[
+                              const SizedBox(height: 14),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(50),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.gold.withAlpha(70)),
+                                ),
+                                child: Text(
+                                  'Каркас: ${currentDrill.slotTemplate}',
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    color: AppColors.textSecondaryDark,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                            if (currentDrill.slotVariable != null) ...[
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.teal.withAlpha(30),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: AppColors.tealLight),
+                                ),
+                                child: Text(
+                                  'Слот: «${currentDrill.slotVariable}»',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    color: AppColors.tealLight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ] else ...[
+                            const Text(
+                              'АЙТЫҢЫЗ (СКАЖИТЕ ВСЛУХ):',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.textSecondaryDark,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              currentDrill.promptRu,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                                height: 1.3,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                           const SizedBox(height: 16),
                           OutlinedButton.icon(
                             icon: const Icon(Icons.volume_up_rounded, color: AppColors.gold),

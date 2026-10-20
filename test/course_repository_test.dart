@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:liduo/data/models/audio_drill.dart';
 import 'package:liduo/data/repositories/course_repository.dart';
 
 void main() {
@@ -17,12 +18,19 @@ void main() {
       expect(lessonDay65.title.contains('B1/B2'), isTrue);
     });
 
-    test('week 1 lessons contain 10-12 intensive speech drills', () async {
+    test('week 1 lessons contain 10-12 intensive speech drills and diverse types', () async {
       final lessonDay1 = await CourseRepository.instance.getLessonForDay(1);
       expect(lessonDay1.drills.length, greaterThanOrEqualTo(10));
+      expect(lessonDay1.vocabList.length, greaterThanOrEqualTo(8));
+      expect(lessonDay1.vocabList.first.wordKk, isNotEmpty);
+      expect(lessonDay1.drills.any((d) => d.type == DrillType.vocab), isTrue);
+      expect(lessonDay1.drills.any((d) => d.type == DrillType.slotSubstitution), isTrue);
+      expect(lessonDay1.drills.any((d) => d.type == DrillType.listening), isTrue);
+      expect(lessonDay1.drills.any((d) => d.type == DrillType.speech), isTrue);
 
       final lessonDay7 = await CourseRepository.instance.getLessonForDay(7);
       expect(lessonDay7.drills.length, equals(12));
+      expect(lessonDay7.vocabList.length, greaterThanOrEqualTo(8));
     });
   });
 }

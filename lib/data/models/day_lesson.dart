@@ -1,4 +1,7 @@
 import 'audio_drill.dart';
+import 'vocab_item.dart';
+
+export 'vocab_item.dart';
 
 /// Модель урока конкретного дня из 90-дневной программы
 class DayLesson {
@@ -8,6 +11,7 @@ class DayLesson {
   final String grammarFormula;
   final String grammarExplanation;
   final List<AudioDrill> drills;
+  final List<VocabItem> vocabList;
   final Map<String, String> keyVocabulary;
 
   const DayLesson({
@@ -17,10 +21,38 @@ class DayLesson {
     required this.grammarFormula,
     required this.grammarExplanation,
     required this.drills,
+    this.vocabList = const [],
     this.keyVocabulary = const {},
   });
 
   factory DayLesson.fromJson(Map<String, dynamic> json) {
+    // Безопасный парсинг списка слов
+    List<VocabItem> parsedVocabList = [];
+    if (json['vocabList'] != null && json['vocabList'] is List) {
+      parsedVocabList = (json['vocabList'] as List<dynamic>)
+          .map((v) => VocabItem.fromJson(v as Map<String, dynamic>))
+          .toList();
+    }
+
+    // Совместимость с keyVocabulary
+    Map<String, String> parsedKeyVocab = {};
+    if (json['keyVocabulary'] != null && json['keyVocabulary'] is Map) {
+      parsedKeyVocab = (json['keyVocabulary'] as Map<String, dynamic>).map(
+        (k, v) => MapEntry(k, v.toString()),
+      );
+    } else if (parsedVocabList.isNotEmpty) {
+      for (final v in parsedVocabList) {
+        parsedKeyVocab[v.wordKk] = v.translationRu;
+      }
+    }
+
+    // Если vocabList был пуст, но был keyVocabulary, синтезируем vocabList
+    if (parsedVocabList.isEmpty && parsedKeyVocab.isNotEmpty) {
+      parsedVocabList = parsedKeyVocab.entries
+          .map((e) => VocabItem(wordKk: e.key, translationRu: e.value))
+          .toList();
+    }
+
     return DayLesson(
       dayNumber: json['dayNumber'] as int,
       weekNumber: json['weekNumber'] as int,
@@ -31,10 +63,8 @@ class DayLesson {
               ?.map((d) => AudioDrill.fromJson(d as Map<String, dynamic>))
               .toList() ??
           [],
-      keyVocabulary: (json['keyVocabulary'] as Map<String, dynamic>?)?.map(
-            (k, v) => MapEntry(k, v.toString()),
-          ) ??
-          {},
+      vocabList: parsedVocabList,
+      keyVocabulary: parsedKeyVocab,
     );
   }
 
@@ -46,6 +76,7 @@ class DayLesson {
       'grammarFormula': grammarFormula,
       'grammarExplanation': grammarExplanation,
       'drills': drills.map((d) => d.toJson()).toList(),
+      'vocabList': vocabList.map((v) => v.toJson()).toList(),
       'keyVocabulary': keyVocabulary,
     };
   }

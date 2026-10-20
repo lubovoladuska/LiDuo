@@ -108,6 +108,59 @@ class CourseRepository {
     return allDrills;
   }
 
+  /// Сбор подстановочных упражнений для тренажера Slot Matrix
+  Future<List<AudioDrill>> getSlotMatrixDrills({
+    Set<int> completedDays = const {},
+    int count = 10,
+  }) async {
+    final daysToFetch = completedDays.isEmpty ? {1, 2, 3, 4, 5, 6, 7} : completedDays;
+    final allDrills = await getDrillsForDays(daysToFetch);
+    final slotDrills = allDrills
+        .where((d) => d.type == DrillType.slotSubstitution || d.slotTemplate != null)
+        .toList();
+    slotDrills.shuffle();
+    if (slotDrills.length > count) {
+      return slotDrills.sublist(0, count);
+    }
+    return slotDrills;
+  }
+
+  /// Сбор активного словаря для режима «Словарный спринт (Vocab Blitz)»
+  Future<List<AudioDrill>> getVocabBlitzDrills({
+    Set<int> completedDays = const {},
+    int count = 10,
+  }) async {
+    final daysToFetch = completedDays.isEmpty ? {1, 2, 3, 4, 5, 6, 7} : completedDays;
+    final List<AudioDrill> vocabDrills = [];
+    final seen = <String>{};
+
+    for (final day in daysToFetch) {
+      final lesson = await getLessonForDay(day);
+      for (final v in lesson.vocabList) {
+        if (!seen.contains(v.wordKk)) {
+          seen.add(v.wordKk);
+          vocabDrills.add(
+            AudioDrill(
+              id: 'vocab_${v.wordKk}_$day',
+              step: vocabDrills.length + 1,
+              type: DrillType.vocab,
+              promptRu: v.translationRu,
+              targetKk: v.wordKk,
+              phoneticTranscription: v.phonetic,
+              grammarNote: v.exampleSentence,
+            ),
+          );
+        }
+      }
+    }
+
+    vocabDrills.shuffle();
+    if (vocabDrills.length > count) {
+      return vocabDrills.sublist(0, count);
+    }
+    return vocabDrills;
+  }
+
   /// Автоматическое создание карточек интервального повторения (SRS) из урока
   Future<void> seedSrsCardsFromLesson(DayLesson lesson) async {
     final now = DateTime.now();

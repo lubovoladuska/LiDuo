@@ -62,6 +62,24 @@ class _PracticeScreenState extends State<PracticeScreen> {
     _launchWorkout(drills, 'Спринт $count сөйлем');
   }
 
+  Future<void> _startSlotMatrix() async {
+    final stats = context.read<StatsProvider>();
+    final drills = await CourseRepository.instance.getSlotMatrixDrills(
+      completedDays: stats.completedDays,
+      count: 12,
+    );
+    _launchWorkout(drills, 'Подстановочный тренажер (Slot Matrix)');
+  }
+
+  Future<void> _startVocabBlitz() async {
+    final stats = context.read<StatsProvider>();
+    final drills = await CourseRepository.instance.getVocabBlitzDrills(
+      completedDays: stats.completedDays,
+      count: 12,
+    );
+    _launchWorkout(drills, 'Словарный спринт (Vocab Blitz)');
+  }
+
   Future<void> _startMistakeReview() async {
     final weakAttempts = await AppDatabase.instance.getWeakDrillAttempts();
     if (weakAttempts.isEmpty) {
@@ -171,6 +189,30 @@ class _PracticeScreenState extends State<PracticeScreen> {
                   badge: '3-5 мин',
                   badgeColor: AppColors.gold,
                   onTap: () => _startQuickSprint(10),
+                ),
+
+                const SizedBox(height: 12),
+
+                // Карточка Словарного спринта
+                _buildWorkoutCard(
+                  context,
+                  title: '📚 Словарный спринт (Vocab Blitz)',
+                  subtitle: 'Быстрый речевой прогон активного запаса слов',
+                  badge: '12 сөз',
+                  badgeColor: AppColors.tealLight,
+                  onTap: _startVocabBlitz,
+                ),
+
+                const SizedBox(height: 12),
+
+                // Карточка Подстановочного тренажера
+                _buildWorkoutCard(
+                  context,
+                  title: '🧩 Подстановочный тренажер (Slot Matrix)',
+                  subtitle: 'Отработка быстрой подстановки в грамматические слоты',
+                  badge: '12 слотов',
+                  badgeColor: AppColors.goldLight,
+                  onTap: _startSlotMatrix,
                 ),
 
                 const SizedBox(height: 12),

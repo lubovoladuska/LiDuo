@@ -18,13 +18,78 @@
         "Көріскенше": "До свидания / До встречи",
         "Қайырлы таң": "Доброе утро",
         "Қайырлы күн": "Добрый день",
-        "Қайырлы кеш": "Добрый вечер"
+        "Қайырлы кеш": "Добрый вечер",
+        "Өзіңіз": "Вы сами",
+        "Бәрі": "Всё / все"
       },
+      "vocabList": [
+        {
+          "wordKk": "Сәлеметсіз бе",
+          "translationRu": "Здравствуйте (вежливо)",
+          "phonetic": "Сәлеметсіз бе",
+          "exampleSentence": "Сәлеметсіз бе, қалайсыз?"
+        },
+        {
+          "wordKk": "Сәлем",
+          "translationRu": "Привет (неформально)",
+          "phonetic": "Сәлем",
+          "exampleSentence": "Сәлем, достым!"
+        },
+        {
+          "wordKk": "Қалайсыз?",
+          "translationRu": "Как ваши дела? (уважительно)",
+          "phonetic": "Қалайсыз?",
+          "exampleSentence": "Айгүл ханым, қалайсыз?"
+        },
+        {
+          "wordKk": "Қалың қалай?",
+          "translationRu": "Как дела? (дружески)",
+          "phonetic": "Қалың қалай?",
+          "exampleSentence": "Сәлем! Қалың қалай?"
+        },
+        {
+          "wordKk": "Жақсы",
+          "translationRu": "Хорошо",
+          "phonetic": "Жақсы",
+          "exampleSentence": "Жақсы, рахмет!"
+        },
+        {
+          "wordKk": "Рахмет",
+          "translationRu": "Спасибо / благодарю",
+          "phonetic": "Рахмет",
+          "exampleSentence": "Көп рахмет!"
+        },
+        {
+          "wordKk": "Қайырлы таң",
+          "translationRu": "Доброе утро",
+          "phonetic": "Қайырлы таң",
+          "exampleSentence": "Қайырлы таң, әріптестер!"
+        },
+        {
+          "wordKk": "Қайырлы күн",
+          "translationRu": "Добрый день",
+          "phonetic": "Қайырлы күн",
+          "exampleSentence": "Қайырлы күн, достар!"
+        },
+        {
+          "wordKk": "Қайырлы кеш",
+          "translationRu": "Добрый вечер",
+          "phonetic": "Қайырлы кеш",
+          "exampleSentence": "Қайырлы кеш, қош келдіңіздер!"
+        },
+        {
+          "wordKk": "Көріскенше",
+          "translationRu": "До встречи / До свидания",
+          "phonetic": "Көріскенше",
+          "exampleSentence": "Көріскенше, сау болыңыз!"
+        }
+      ],
       "drills": [
         {
           "id": "d01_01",
           "step": 1,
-          "promptRu": "Скажите вежливое «Здравствуйте»",
+          "type": "vocab",
+          "promptRu": "Изучите и произнесите ключевое приветствие: «Здравствуйте»",
           "targetKk": "Сәлеметсіз бе",
           "phoneticTranscription": "Сәлеметсіз бе",
           "grammarNote": "Звук «ә» произносится мягко, среднее между русскими [э] и [а]."
@@ -32,71 +97,86 @@
         {
           "id": "d01_02",
           "step": 2,
-          "promptRu": "Спросите вежливо «Как ваши дела?»",
-          "targetKk": "Қалайсыз?",
-          "phoneticTranscription": "Қалайсыз?",
-          "grammarNote": "«Қ» — глубокий заднеязычный звук, произносится у корня языка."
+          "type": "vocab",
+          "promptRu": "Изучите слово благодарности: «Спасибо»",
+          "targetKk": "Рахмет",
+          "phoneticTranscription": "Рахмет",
+          "grammarNote": "«Рахмет» произносится с ударением на последний слог."
         },
         {
           "id": "d01_03",
           "step": 3,
-          "promptRu": "Спросите друга: «Как дела?» (неформально)",
-          "targetKk": "Қалың қалай?",
-          "phoneticTranscription": "Қалың қалай?",
-          "grammarNote": "Звук «ң» носовой, заднеязычный (как английский -ng в 'sing')."
+          "type": "slotSubstitution",
+          "slotVariable": "таң",
+          "slotTemplate": "Қайырлы [слот]",
+          "promptRu": "Подставьте слово «утро» (таң): «Доброе утро»",
+          "targetKk": "Қайырлы таң",
+          "phoneticTranscription": "Қайырлы таң",
+          "grammarNote": "«Таң» — утро/рассвет с заднеязычным «ң»."
         },
         {
           "id": "d01_04",
           "step": 4,
-          "promptRu": "Ответьте: «Хорошо, спасибо»",
-          "targetKk": "Жақсы, рахмет",
-          "phoneticTranscription": "Жақсы, рахмет",
-          "grammarNote": "«Жақсы» — твердое слово, все гласные [а], [ы] заднего ряда."
+          "type": "slotSubstitution",
+          "slotVariable": "күн",
+          "slotTemplate": "Қайырлы [слот]",
+          "promptRu": "Подставьте слово «день» (күн): «Добрый день»",
+          "targetKk": "Қайырлы күн",
+          "phoneticTranscription": "Қайырлы күн",
+          "grammarNote": "«Күн» — день и солнце, мягкий звук «ү»."
         },
         {
           "id": "d01_05",
           "step": 5,
-          "promptRu": "Пожелайте: «Доброе утро»",
-          "targetKk": "Қайырлы таң",
-          "phoneticTranscription": "Қайырлы таң",
-          "grammarNote": "«Таң» — утро/рассвет."
-        },
-        {
-          "id": "d01_06",
-          "step": 6,
-          "promptRu": "Пожелайте: «Добрый день»",
-          "targetKk": "Қайырлы күн",
-          "phoneticTranscription": "Қайырлы күн",
-          "grammarNote": "«Күн» — день/солнце, мягкий звук [ү]."
-        },
-        {
-          "id": "d01_07",
-          "step": 7,
-          "promptRu": "Пожелайте: «Добрый вечер»",
+          "type": "slotSubstitution",
+          "slotVariable": "кеш",
+          "slotTemplate": "Қайырлы [слот]",
+          "promptRu": "Подставьте слово «вечер» (кеш): «Добрый вечер»",
           "targetKk": "Қайырлы кеш",
           "phoneticTranscription": "Қайырлы кеш",
           "grammarNote": "«Кеш» — вечер."
         },
         {
+          "id": "d01_06",
+          "step": 6,
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Қалың қалай?",
+          "phoneticTranscription": "Қалың қалай?",
+          "grammarNote": "Обратите внимание на мелодику неформального вопроса."
+        },
+        {
+          "id": "d01_07",
+          "step": 7,
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Бәрі жақсы, өзіңіз қалайсыз?",
+          "phoneticTranscription": "Бәрі жақсы, өзіңіз қалайсыз?",
+          "grammarNote": "«Өзіңіз» — вежливое обращение 'а вы сами?'."
+        },
+        {
           "id": "d01_08",
           "step": 8,
-          "promptRu": "Спросите: «Как ваше самочувствие?»",
-          "targetKk": "Қал-жағдайыңыз қалай?",
-          "phoneticTranscription": "Қал-жағдайыңыз қалай?",
-          "grammarNote": "Очень теплое традиционное казахское приветствие."
+          "type": "speech",
+          "promptRu": "Спросите вежливо у старшего собеседника: «Как ваши дела?»",
+          "targetKk": "Қалайсыз?",
+          "phoneticTranscription": "Қалайсыз?",
+          "grammarNote": "«Қ» — глубокий заднеязычный звук, произносится у корня языка."
         },
         {
           "id": "d01_09",
           "step": 9,
-          "promptRu": "Скажите: «Все хорошо, а вы как?»",
-          "targetKk": "Бәрі жақсы, өзіңіз қалайсыз?",
-          "phoneticTranscription": "Бәрі жақсы, өзіңіз қалайсыз?",
-          "grammarNote": "«Өзіңіз» — вы сами (вежливая форма от 'өз')."
+          "type": "speech",
+          "promptRu": "Ответьте на вопрос о делах: «Хорошо, спасибо»",
+          "targetKk": "Жақсы, рахмет",
+          "phoneticTranscription": "Жақсы, рахмет",
+          "grammarNote": "«Жақсы» — твердое гармоничное слово."
         },
         {
           "id": "d01_10",
           "step": 10,
-          "promptRu": "Скажите: «До свидания / До встречи»",
+          "type": "speech",
+          "promptRu": "Вежливо попрощайтесь: «До свидания / До встречи»",
           "targetKk": "Көріскенше",
           "phoneticTranscription": "Көріскенше",
           "grammarNote": "Звук «ө» — мягкий огубленный гласный."
@@ -115,90 +195,172 @@
         "Студент": "Студент",
         "Дәрігер": "Врач",
         "Мұғалім": "Учитель",
-        "Сіз": "Вы (уваж.)",
         "Бағдарламашы": "Программист",
+        "Оқушы": "Ученик",
+        "Инженер": "Инженер",
+        "Сіз": "Вы (вежливо)",
         "Ол": "Он / она"
       },
+      "vocabList": [
+        {
+          "wordKk": "Қазақ",
+          "translationRu": "Казах / казашка",
+          "phonetic": "Қазақ",
+          "exampleSentence": "Мен қазақпын."
+        },
+        {
+          "wordKk": "Студент",
+          "translationRu": "Студент / студентка",
+          "phonetic": "Студент",
+          "exampleSentence": "Сен студентсің бе?"
+        },
+        {
+          "wordKk": "Дәрігер",
+          "translationRu": "Врач / доктор",
+          "phonetic": "Дәрігер",
+          "exampleSentence": "Ол білікті дәрігер."
+        },
+        {
+          "wordKk": "Мұғалім",
+          "translationRu": "Учитель / преподаватель",
+          "phonetic": "Мұғалім",
+          "exampleSentence": "Сіз мектепте мұғалімсіз бе?"
+        },
+        {
+          "wordKk": "Бағдарламашы",
+          "translationRu": "Программист / IT-разработчик",
+          "phonetic": "Бағдарламашы",
+          "exampleSentence": "Мен IT компанияда бағдарламашымын."
+        },
+        {
+          "wordKk": "Оқушы",
+          "translationRu": "Школьник / ученик",
+          "phonetic": "Оқушы",
+          "exampleSentence": "Біз оқушымыз."
+        },
+        {
+          "wordKk": "Инженер",
+          "translationRu": "Инженер",
+          "phonetic": "Инженер",
+          "exampleSentence": "Ол инженер болып жұмыс істейді."
+        },
+        {
+          "wordKk": "Кім?",
+          "translationRu": "Кто?",
+          "phonetic": "Кім?",
+          "exampleSentence": "Сен кімсің?"
+        },
+        {
+          "wordKk": "Сөйлеймін",
+          "translationRu": "Я говорю",
+          "phonetic": "Сөйлеймін",
+          "exampleSentence": "Мен қазақша сөйлеймін."
+        },
+        {
+          "wordKk": "Қазақша",
+          "translationRu": "По-казахски",
+          "phonetic": "Қазақша",
+          "exampleSentence": "Қазақша жақсы сөйлейсіз!"
+        }
+      ],
       "drills": [
         {
           "id": "d02_01",
           "step": 1,
-          "promptRu": "Скажите: «Я казах / казашка»",
-          "targetKk": "Мен қазақпын",
-          "phoneticTranscription": "Мен қазақпын",
-          "grammarNote": "Основа «қазақ» заканчивается на глухую 'қ' -> окончание '-пын'."
+          "type": "vocab",
+          "promptRu": "Освойте профессию: «Врач» (дәрігер)",
+          "targetKk": "Дәрігер",
+          "phoneticTranscription": "Дәрігер",
+          "grammarNote": "Мягкое слово с сонорной 'р' на конце."
         },
         {
           "id": "d02_02",
           "step": 2,
-          "promptRu": "Скажите: «Я студент»",
-          "targetKk": "Мен студентпін",
-          "phoneticTranscription": "Мен студентпін",
-          "grammarNote": "Слово мягкое, глухая 'т' -> окончание '-пін'."
+          "type": "vocab",
+          "promptRu": "Освойте профессию: «Программист» (бағдарламашы)",
+          "targetKk": "Бағдарламашы",
+          "phoneticTranscription": "Бағдарламашы",
+          "grammarNote": "Заканчивается на гласную 'ы', требует твердых аффиксов."
         },
         {
           "id": "d02_03",
           "step": 3,
-          "promptRu": "Скажите: «Я врач»",
-          "targetKk": "Мен дәрігермін",
-          "phoneticTranscription": "Мен дәрігермін",
-          "grammarNote": "Слово мягкое, сонорная 'р' -> окончание '-мін'."
+          "type": "slotSubstitution",
+          "slotVariable": "қазақпын",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте: «Я казах / казашка»",
+          "targetKk": "Мен қазақпын",
+          "phoneticTranscription": "Мен қазақпын",
+          "grammarNote": "Основа «қазақ» на глухую 'қ' -> окончание '-пын'."
         },
         {
           "id": "d02_04",
           "step": 4,
-          "promptRu": "Скажите: «Я программист / IT-специалист»",
-          "targetKk": "Мен бағдарламашымын",
-          "phoneticTranscription": "Мен бағдарламашымын",
-          "grammarNote": "«Бағдарламашы» заканчивается на гласную 'ы' -> '-мын'."
+          "type": "slotSubstitution",
+          "slotVariable": "студентпін",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте: «Я студент»",
+          "targetKk": "Мен студентпін",
+          "phoneticTranscription": "Мен студентпін",
+          "grammarNote": "Глухая 'т' -> мягкое окончание '-пін'."
         },
         {
           "id": "d02_05",
           "step": 5,
-          "promptRu": "Скажите: «Вы учитель» (вежливо)",
-          "targetKk": "Сіз мұғалімсіз",
-          "phoneticTranscription": "Сіз мұғалімсіз",
-          "grammarNote": "Для 'Сіз' окончание всегда '-сыз/-сіз'."
+          "type": "slotSubstitution",
+          "slotVariable": "дәрігермін",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте: «Я врач»",
+          "targetKk": "Мен дәрігермін",
+          "phoneticTranscription": "Мен дәрігермін",
+          "grammarNote": "Сонорная 'р' -> окончание '-мін'."
         },
         {
           "id": "d02_06",
           "step": 6,
-          "promptRu": "Спросите: «Кто ты?» (неформально)",
-          "targetKk": "Сен кімсің?",
-          "phoneticTranscription": "Сен кімсің?",
-          "grammarNote": "Для 'Сен' окончание '-сың/-сің'."
+          "type": "slotSubstitution",
+          "slotVariable": "бағдарламашымын",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте: «Я программист»",
+          "targetKk": "Мен бағдарламашымын",
+          "phoneticTranscription": "Мен бағдарламашымын",
+          "grammarNote": "Гласная 'ы' -> окончание '-мын'."
         },
         {
           "id": "d02_07",
           "step": 7,
-          "promptRu": "Скажите: «Он инженер»",
-          "targetKk": "Ол инженер",
-          "phoneticTranscription": "Ол инженер",
-          "grammarNote": "В третьем лице (Ол) окончания сказуемости нет!"
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Сіз қазақша сөйлейсіз бе?",
+          "phoneticTranscription": "Сіз қазақша сөйлейсіз бе?",
+          "grammarNote": "Обратите внимание на мягкость вопросительной частицы «бе»."
         },
         {
           "id": "d02_08",
           "step": 8,
-          "promptRu": "Скажите: «Мы ученики / студенты»",
-          "targetKk": "Біз оқушымыз",
-          "phoneticTranscription": "Біз оқушымыз",
-          "grammarNote": "Для 'Біз' окончание '-мыз/-міз'."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Иә, мен қазақша сөйлеймін",
+          "phoneticTranscription": "Иә, мен қазақша сөйлеймін",
+          "grammarNote": "«Иә» произносится открыто и утвердительно."
         },
         {
           "id": "d02_09",
           "step": 9,
-          "promptRu": "Спросите: «Вы говорите по-казахски?»",
-          "targetKk": "Сіз қазақша сөйлейсіз бе?",
-          "phoneticTranscription": "Сіз қазақша сөйлейсіз бе?",
-          "grammarNote": "Вопросительная частица 'бе' после звонких и гласных."
+          "type": "speech",
+          "promptRu": "Спросите собеседника неформально: «Кто ты?»",
+          "targetKk": "Сен кімсің?",
+          "phoneticTranscription": "Сен кімсің?",
+          "grammarNote": "Окончание '-сың/-сің' для местоимения «Сен»."
         },
         {
           "id": "d02_10",
           "step": 10,
-          "promptRu": "Ответьте: «Да, я говорю по-казахски»",
-          "targetKk": "Иә, мен қазақша сөйлеймін",
-          "phoneticTranscription": "Иә, мен қазақша сөйлеймін",
-          "grammarNote": "«Иә» — да."
+          "type": "speech",
+          "promptRu": "Скажите с гордостью: «Мы ученики / студенты»",
+          "targetKk": "Біз оқушымыз",
+          "phoneticTranscription": "Біз оқушымыз",
+          "grammarNote": "Для 'Біз' окончание множественности '-мыз/-міз'."
         }
       ]
     },
@@ -215,88 +377,169 @@
         "Сөйлеңізші": "Говорите, пожалуйста",
         "Аздап": "Немного",
         "Көмектесіңізші": "Помогите, пожалуйста",
-        "Қайталаңызшы": "Повторите, пожалуйста"
+        "Қайталаңызшы": "Повторите, пожалуйста",
+        "Кешіріңіз": "Извините / прошу прощения",
+        "Жаңадан": "Заново / недавно",
+        "Енді": "Теперь / сейчас"
       },
+      "vocabList": [
+        {
+          "wordKk": "Түсінемін",
+          "translationRu": "Я понимаю",
+          "phonetic": "Түсінемін",
+          "exampleSentence": "Мен сізді жақсы түсінемін."
+        },
+        {
+          "wordKk": "Түсінбеймін",
+          "translationRu": "Я не понимаю",
+          "phonetic": "Түсінбеймін",
+          "exampleSentence": "Кешіріңіз, мен түсінбеймін."
+        },
+        {
+          "wordKk": "Ақырын",
+          "translationRu": "Медленно / спокойно / тихо",
+          "phonetic": "Ақырын",
+          "exampleSentence": "Ақырын сөйлеңізші."
+        },
+        {
+          "wordKk": "Көмектесіңізші",
+          "translationRu": "Помогите, пожалуйста",
+          "phonetic": "Көмектесіңізші",
+          "exampleSentence": "Маған көмектесіңізші, өтінемін."
+        },
+        {
+          "wordKk": "Аздап",
+          "translationRu": "Немного / чуть-чуть",
+          "phonetic": "Аздап",
+          "exampleSentence": "Мен аздап түсінемін."
+        },
+        {
+          "wordKk": "Қайталаңызшы",
+          "translationRu": "Повторите, пожалуйста",
+          "phonetic": "Қайталаңызшы",
+          "exampleSentence": "Тағы бір рет қайталаңызшы."
+        },
+        {
+          "wordKk": "Кешіріңіз",
+          "translationRu": "Извините / прошу прощения",
+          "phonetic": "Кешіріңіз",
+          "exampleSentence": "Кешіріңіз, сұрақ қоюға бола ма?"
+        },
+        {
+          "wordKk": "Қалай болады?",
+          "translationRu": "Как будет?",
+          "phonetic": "Қалай болады?",
+          "exampleSentence": "Бұл қазақша қалай болады?"
+        },
+        {
+          "wordKk": "Маған",
+          "translationRu": "Мне (дательный падеж)",
+          "phonetic": "Маған",
+          "exampleSentence": "Маған көмек керек."
+        },
+        {
+          "wordKk": "Енді",
+          "translationRu": "Теперь / сейчас",
+          "phonetic": "Енді",
+          "exampleSentence": "Енді бәрі түсінікті."
+        }
+      ],
       "drills": [
         {
           "id": "d03_01",
           "step": 1,
-          "promptRu": "Скажите: «Я понимаю»",
-          "targetKk": "Мен түсінемін",
-          "phoneticTranscription": "Мен түсінемін",
-          "grammarNote": "Основа 'түсін' + переходное 'е' + личное 'мін'."
+          "type": "vocab",
+          "promptRu": "Выучите базовое признание: «Я не понимаю» (түсінбеймін)",
+          "targetKk": "Түсінбеймін",
+          "phoneticTranscription": "Түсінбеймін",
+          "grammarNote": "Отрицательный суффикс '-бей-'."
         },
         {
           "id": "d03_02",
           "step": 2,
-          "promptRu": "Скажите: «Я не понимаю»",
-          "targetKk": "Мен түсінбеймін",
-          "phoneticTranscription": "Мен түсінбеймін",
-          "grammarNote": "Ключевая спасительная фраза в любой непонятной ситуации."
+          "type": "vocab",
+          "promptRu": "Выучите наречие скорости: «Медленно» (ақырын)",
+          "targetKk": "Ақырын",
+          "phoneticTranscription": "Ақырын",
+          "grammarNote": "Твердое слово, обе гласные «ы» заднего ряда."
         },
         {
           "id": "d03_03",
           "step": 3,
-          "promptRu": "Попросите: «Говорите помедленнее, пожалуйста»",
-          "targetKk": "Ақырын сөйлеңізші",
-          "phoneticTranscription": "Ақырын сөйлеңізші",
-          "grammarNote": "«Ақырын» — тихо, медленно, спокойно."
+          "type": "slotSubstitution",
+          "slotVariable": "түсінемін",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте: «Я понимаю»",
+          "targetKk": "Мен түсінемін",
+          "phoneticTranscription": "Мен түсінемін",
+          "grammarNote": "Глагол в утвердительной форме настоящего времени."
         },
         {
           "id": "d03_04",
           "step": 4,
-          "promptRu": "Скажите: «Я немного говорю по-казахски»",
+          "type": "slotSubstitution",
+          "slotVariable": "түсінбеймін",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте: «Я не понимаю»",
+          "targetKk": "Мен түсінбеймін",
+          "phoneticTranscription": "Мен түсінбеймін",
+          "grammarNote": "Ключевая фраза для снятия языкового барьера."
+        },
+        {
+          "id": "d03_05",
+          "step": 5,
+          "type": "slotSubstitution",
+          "slotVariable": "сөйлеңізші",
+          "slotTemplate": "Ақырын [слот]",
+          "promptRu": "Подставьте: «Говорите помедленнее, пожалуйста»",
+          "targetKk": "Ақырын сөйлеңізші",
+          "phoneticTranscription": "Ақырын сөйлеңізші",
+          "grammarNote": "Вежливое окончание просьбы «-ңізші»."
+        },
+        {
+          "id": "d03_06",
+          "step": 6,
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Қазақша қалай болады?",
+          "phoneticTranscription": "Қазақша қалай болады?",
+          "grammarNote": "«Қалай болады» означает «как будет»."
+        },
+        {
+          "id": "d03_07",
+          "step": 7,
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Маған көмектесіңізші",
+          "phoneticTranscription": "Маған көмектесіңізші",
+          "grammarNote": "«Маған» — мне."
+        },
+        {
+          "id": "d03_08",
+          "step": 8,
+          "type": "speech",
+          "promptRu": "Скажите честно: «Я немного говорю по-казахски»",
           "targetKk": "Мен аздап қазақша сөйлеймін",
           "phoneticTranscription": "Мен аздап қазақша сөйлеймін",
           "grammarNote": "«Аздап» означает 'чуть-чуть, немного'."
         },
         {
-          "id": "d03_05",
-          "step": 5,
-          "promptRu": "Попросите: «Помогите мне, пожалуйста»",
-          "targetKk": "Маған көмектесіңізші",
-          "phoneticTranscription": "Маған көмектесіңізші",
-          "grammarNote": "«Маған» — мне (дательно-направительный падеж)."
-        },
-        {
-          "id": "d03_06",
-          "step": 6,
-          "promptRu": "Попросите: «Повторите еще раз, пожалуйста»",
-          "targetKk": "Қайталап жіберіңізші",
-          "phoneticTranscription": "Қайталап жіберіңізші",
-          "grammarNote": "Конструкция с '-п жіберу' для вежливой мгновенной просьбы."
-        },
-        {
-          "id": "d03_07",
-          "step": 7,
-          "promptRu": "Спросите: «Что это такое?»",
-          "targetKk": "Бұл не?",
-          "phoneticTranscription": "Бұл не?",
-          "grammarNote": "«Бұл» — это, «не» — что."
-        },
-        {
-          "id": "d03_08",
-          "step": 8,
-          "promptRu": "Спросите: «Как это будет по-казахски?»",
-          "targetKk": "Қазақша қалай болады?",
-          "phoneticTranscription": "Қазақша қалай болады?",
-          "grammarNote": "Золотая фраза для изучения языка у носителей."
-        },
-        {
           "id": "d03_09",
           "step": 9,
-          "promptRu": "Предупредите: «Извините, я только учусь»",
+          "type": "speech",
+          "promptRu": "Предупредите с уважением: «Извините, я только учусь»",
           "targetKk": "Кешіріңіз, мен жаңадан үйреніп жүрмін",
           "phoneticTranscription": "Кешіріңіз, мен жаңадан үйреніп жүрмін",
-          "grammarNote": "«Жаңадан» — заново/недавно, «үйреніп жүрмін» — нахожусь в процессе обучения."
+          "grammarNote": "«Үйреніп жүрмін» — нахожусь в процессе обучения."
         },
         {
           "id": "d03_10",
           "step": 10,
-          "promptRu": "Скажите: «Спасибо, теперь я понял»",
+          "type": "speech",
+          "promptRu": "Скажите с облегчением: «Спасибо, теперь я понял»",
           "targetKk": "Рахмет, енді түсіндім",
           "phoneticTranscription": "Рахмет, енді түсіндім",
-          "grammarNote": "«Енді» — теперь/сейчас, «түсіндім» — понял (прошедшее время)."
+          "grammarNote": "«Түсіндім» — прошедшее совершенное время."
         }
       ]
     },
@@ -312,88 +555,170 @@
         "Кім?": "Кто?",
         "Қайдан?": "Откуда?",
         "Танысқаныма қуаныштымын": "Приятно познакомиться",
-        "Қала": "Город"
+        "Қала": "Город",
+        "Осында": "Здесь / тут",
+        "Тұрамын": "Я живу / проживаю",
+        "Өте": "Очень",
+        "Сау болыңыз": "Будьте здоровы / до свидания"
       },
+      "vocabList": [
+        {
+          "wordKk": "Ат",
+          "translationRu": "Имя",
+          "phonetic": "Ат",
+          "exampleSentence": "Сіздің атыңыз кім?"
+        },
+        {
+          "wordKk": "Менің атым",
+          "translationRu": "Мое имя",
+          "phonetic": "Менің атым",
+          "exampleSentence": "Менің атым — Серік."
+        },
+        {
+          "wordKk": "Қайдан?",
+          "translationRu": "Откуда?",
+          "phonetic": "Қайдан?",
+          "exampleSentence": "Сіз қайдан боласыз?"
+        },
+        {
+          "wordKk": "Қала",
+          "translationRu": "Город",
+          "phonetic": "Қала",
+          "exampleSentence": "Алматы — әдемі қала."
+        },
+        {
+          "wordKk": "Осында",
+          "translationRu": "Здесь / тут",
+          "phonetic": "Осында",
+          "exampleSentence": "Мен осында тұрамын."
+        },
+        {
+          "wordKk": "Тұрамын",
+          "translationRu": "Я живу / проживаю",
+          "phonetic": "Тұрамын",
+          "exampleSentence": "Мен қалада тұрамын."
+        },
+        {
+          "wordKk": "Танысқаныма қуаныштымын",
+          "translationRu": "Приятно познакомиться",
+          "phonetic": "Танысқаныма қуаныштымын",
+          "exampleSentence": "Сізбен танысқаныма қуаныштымын!"
+        },
+        {
+          "wordKk": "Өте",
+          "translationRu": "Очень / весьма",
+          "phonetic": "Өте",
+          "exampleSentence": "Бұл өте жақсы."
+        },
+        {
+          "wordKk": "Сау болыңыз",
+          "translationRu": "До свидания (будьте здоровы)",
+          "phonetic": "Сау болыңыз",
+          "exampleSentence": "Сау болыңыз, ертең көріскенше!"
+        },
+        {
+          "wordKk": "Ел",
+          "translationRu": "Страна / народ",
+          "phonetic": "Ел",
+          "exampleSentence": "Біздің ел — Қазақстан."
+        }
+      ],
       "drills": [
         {
           "id": "d04_01",
           "step": 1,
-          "promptRu": "Спросите вежливо: «Как вас зовут?»",
-          "targetKk": "Сіздің атыңыз кім?",
-          "phoneticTranscription": "Сіздің атыңыз кім?",
-          "grammarNote": "«Атыңыз» содержит вежливое притяжательное окончание '-ыңыз'."
+          "type": "vocab",
+          "promptRu": "Выучите ключевую фразу вежливости: «Приятно познакомиться»",
+          "targetKk": "Танысқаныма қуаныштымын",
+          "phoneticTranscription": "Танысқаныма қуаныштымын",
+          "grammarNote": "Дословно: 'Я рад(а) нашему знакомству'."
         },
         {
           "id": "d04_02",
           "step": 2,
-          "promptRu": "Скажите: «Меня зовут Айдар»",
-          "targetKk": "Менің атым Айдар",
-          "phoneticTranscription": "Менің атым Айдар",
-          "grammarNote": "Шаблон для представления себя."
+          "type": "vocab",
+          "promptRu": "Выучите вопрос происхождения: «Откуда вы?»",
+          "targetKk": "Сіз қайдансыз?",
+          "phoneticTranscription": "Сіз қайдансыз?",
+          "grammarNote": "«Қайдан» + личное окончание уважения «-сыз»."
         },
         {
           "id": "d04_03",
           "step": 3,
-          "promptRu": "Скажите: «Очень приятно познакомиться»",
-          "targetKk": "Танысқаныма қуаныштымын",
-          "phoneticTranscription": "Танысқаныма қуаныштымын",
-          "grammarNote": "Дословно: 'Рад нашему знакомству'."
+          "type": "slotSubstitution",
+          "slotVariable": "Астанаданмын",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте город Астана: «Я из Астаны»",
+          "targetKk": "Мен Астанаданмын",
+          "phoneticTranscription": "Мен Астанаданмын",
+          "grammarNote": "Астана + исходный падеж «-дан» + личное окончание «-мын»."
         },
         {
           "id": "d04_04",
           "step": 4,
-          "promptRu": "Спросите: «Откуда вы?»",
-          "targetKk": "Сіз қайдансыз?",
-          "phoneticTranscription": "Сіз қайдансыз?",
-          "grammarNote": "«Қайдан» + личное окончание '-сыз'."
+          "type": "slotSubstitution",
+          "slotVariable": "Алматыданмын",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте город Алматы: «Я из Алматы»",
+          "targetKk": "Мен Алматыданмын",
+          "phoneticTranscription": "Мен Алматыданмын",
+          "grammarNote": "Алматы + «-дан» + «-мын»."
         },
         {
           "id": "d04_05",
           "step": 5,
-          "promptRu": "Ответьте: «Я из Астаны»",
-          "targetKk": "Мен Астанаданмын",
-          "phoneticTranscription": "Мен Астанаданмын",
-          "grammarNote": "Астана + -дан (из) + -мын (я)."
+          "type": "slotSubstitution",
+          "slotVariable": "Шымкенттенмін",
+          "slotTemplate": "Мен [слот]",
+          "promptRu": "Подставьте город Шымкент: «Я из Шымкента»",
+          "targetKk": "Мен Шымкенттенмін",
+          "phoneticTranscription": "Мен Шымкенттенмін",
+          "grammarNote": "Глухая «т» на конце -> глухое «-тен» + мягкое «-мін»."
         },
         {
           "id": "d04_06",
           "step": 6,
-          "promptRu": "Ответьте: «Я из Алматы»",
-          "targetKk": "Мен Алматыданмын",
-          "phoneticTranscription": "Мен Алматыданмын",
-          "grammarNote": "Алматы + -дан + -мын."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Сіздің атыңыз кім?",
+          "phoneticTranscription": "Сіздің атыңыз кім?",
+          "grammarNote": "Вежливое притяжательное окончание «-ыңыз»."
         },
         {
           "id": "d04_07",
           "step": 7,
-          "promptRu": "Спросите: «Из какого вы города?»",
-          "targetKk": "Сіз қай қаладансыз?",
-          "phoneticTranscription": "Сіз қай қаладансыз?",
-          "grammarNote": "«Қала» — город."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Мен осында тұрамын",
+          "phoneticTranscription": "Мен осында тұрамын",
+          "grammarNote": "«Осында» — здесь."
         },
         {
           "id": "d04_08",
           "step": 8,
-          "promptRu": "Скажите: «Я живу здесь»",
-          "targetKk": "Мен осында тұрамын",
-          "phoneticTranscription": "Мен осында тұрамын",
-          "grammarNote": "«Осында» — здесь / тут."
+          "type": "speech",
+          "promptRu": "Представьтесь новому собеседнику: «Меня зовут Айдар»",
+          "targetKk": "Менің атым Айдар",
+          "phoneticTranscription": "Менің атым Айдар",
+          "grammarNote": "Базовый речевой шаблон самопрезентации."
         },
         {
           "id": "d04_09",
           "step": 9,
-          "promptRu": "Скажите: «Очень рад с вами познакомиться»",
-          "targetKk": "Сізбен танысқаныма өте қуаныштымын",
-          "phoneticTranscription": "Сізбен танысқаныма өте қуаныштымын",
-          "grammarNote": "«Сізбен» — с вами, «өте» — очень."
+          "type": "speech",
+          "promptRu": "Спросите собеседника: «Из какого вы города?»",
+          "targetKk": "Сіз қай қаладансыз?",
+          "phoneticTranscription": "Сіз қай қаладансыз?",
+          "grammarNote": "«Қай» — какой / который, «қала» — город."
         },
         {
           "id": "d04_10",
           "step": 10,
-          "promptRu": "Попрощайтесь: «Будьте здоровы, до свидания»",
-          "targetKk": "Сау болыңыз, көріскенше",
-          "phoneticTranscription": "Сау болыңыз, көріскенше",
-          "grammarNote": "«Сау болыңыз» — будьте здоровы (до свидания)."
+          "type": "speech",
+          "promptRu": "Скажите тепло: «Очень рад с вами познакомиться»",
+          "targetKk": "Сізбен танысқаныма өте қуаныштымын",
+          "phoneticTranscription": "Сізбен танысқаныма өте қуаныштымын",
+          "grammarNote": "«Сізбен» — с вами, «өте» — очень."
         }
       ]
     },
@@ -411,88 +736,169 @@
         "Уақыт": "Время",
         "Сұрақ": "Вопрос",
         "Ақша": "Деньги",
-        "Орын": "Место"
+        "Орын": "Место",
+        "Интернет": "Интернет",
+        "Мәселе": "Проблема / вопрос",
+        "Дайын": "Готов / готово"
       },
+      "vocabList": [
+        {
+          "wordKk": "Бар",
+          "translationRu": "Есть / имеется / существует",
+          "phonetic": "Бар",
+          "exampleSentence": "Мұнда орын бар."
+        },
+        {
+          "wordKk": "Жоқ",
+          "translationRu": "Нет / отсутствует",
+          "phonetic": "Жоқ",
+          "exampleSentence": "Қазір уақыт жоқ."
+        },
+        {
+          "wordKk": "Уақыт",
+          "translationRu": "Время",
+          "phonetic": "Уақыт",
+          "exampleSentence": "Сізде бес минут уақыт бар ма?"
+        },
+        {
+          "wordKk": "Сұрақ",
+          "translationRu": "Вопрос",
+          "phonetic": "Сұрақ",
+          "exampleSentence": "Менде бір сұрақ бар."
+        },
+        {
+          "wordKk": "Ақша",
+          "translationRu": "Деньги",
+          "phonetic": "Ақша",
+          "exampleSentence": "Қолма-қол ақша бар ма?"
+        },
+        {
+          "wordKk": "Орын",
+          "translationRu": "Место",
+          "phonetic": "Орын",
+          "exampleSentence": "Бос орын бар ма?"
+        },
+        {
+          "wordKk": "Мәселе",
+          "translationRu": "Проблема / дело / задача",
+          "phonetic": "Мәселе",
+          "exampleSentence": "Ешқандай мәселе жоқ."
+        },
+        {
+          "wordKk": "Дайын",
+          "translationRu": "Готов / готово",
+          "phonetic": "Дайын",
+          "exampleSentence": "Барлығы дайын."
+        },
+        {
+          "wordKk": "Менде",
+          "translationRu": "У меня",
+          "phonetic": "Менде",
+          "exampleSentence": "Менде бәрі бар."
+        },
+        {
+          "wordKk": "Сізде",
+          "translationRu": "У вас (вежливо)",
+          "phonetic": "Сізде",
+          "exampleSentence": "Сізде көлік бар ма?"
+        }
+      ],
       "drills": [
         {
           "id": "d05_01",
           "step": 1,
-          "promptRu": "Скажите: «У меня есть вопрос»",
+          "type": "vocab",
+          "promptRu": "Выучите слово наличия: «Есть / имеется» (бар)",
+          "targetKk": "Бар",
+          "phoneticTranscription": "Бар",
+          "grammarNote": "Универсальное слово утверждения наличия."
+        },
+        {
+          "id": "d05_02",
+          "step": 2,
+          "type": "vocab",
+          "promptRu": "Выучите слово отсутствия: «Нет / отсутствует» (жоқ)",
+          "targetKk": "Жоқ",
+          "phoneticTranscription": "Жоқ",
+          "grammarNote": "Заканчивается на глубокий звук «қ»."
+        },
+        {
+          "id": "d05_03",
+          "step": 3,
+          "type": "slotSubstitution",
+          "slotVariable": "сұрақ бар",
+          "slotTemplate": "Менде [слот]",
+          "promptRu": "Подставьте: «У меня есть вопрос»",
           "targetKk": "Менде сұрақ бар",
           "phoneticTranscription": "Менде сұрақ бар",
           "grammarNote": "«Сұрақ» — вопрос."
         },
         {
-          "id": "d05_02",
-          "step": 2,
-          "promptRu": "Скажите: «У меня нет времени»",
+          "id": "d05_04",
+          "step": 4,
+          "type": "slotSubstitution",
+          "slotVariable": "уақыт жоқ",
+          "slotTemplate": "Менде [слот]",
+          "promptRu": "Подставьте: «У меня нет времени»",
           "targetKk": "Менде уақыт жоқ",
           "phoneticTranscription": "Менде уақыт жоқ",
           "grammarNote": "«Уақыт» — время."
         },
         {
-          "id": "d05_03",
-          "step": 3,
-          "promptRu": "Спросите: «У вас есть время?»",
-          "targetKk": "Сізде уақыт бар ма?",
-          "phoneticTranscription": "Сізде уақыт бар ма?",
-          "grammarNote": "Вопросительная частица 'ма' после сонорной 'р' в 'бар'."
-        },
-        {
-          "id": "d05_04",
-          "step": 4,
-          "promptRu": "Скажите: «У меня все хорошо»",
-          "targetKk": "Менде бәрі жақсы",
-          "phoneticTranscription": "Менде бәрі жақсы",
-          "grammarNote": "«Бәрі» означает 'всё / все'."
-        },
-        {
           "id": "d05_05",
           "step": 5,
-          "promptRu": "Спросите: «Что случилось? / В чем дело?»",
-          "targetKk": "Не болды?",
-          "phoneticTranscription": "Не болды?",
-          "grammarNote": "Очень частая разговорная связка."
+          "type": "slotSubstitution",
+          "slotVariable": "интернет бар ма?",
+          "slotTemplate": "Сізде [слот]",
+          "promptRu": "Подставьте вопрос в кафе: «У вас есть интернет?»",
+          "targetKk": "Сізде интернет бар ма?",
+          "phoneticTranscription": "Сізде интернет бар ма?",
+          "grammarNote": "Частица вопроса «ма» после звонкой 'р'."
         },
         {
           "id": "d05_06",
           "step": 6,
-          "promptRu": "Спросите в кафе: «У вас есть интернет / Wi-Fi?»",
-          "targetKk": "Сізде интернет бар ма?",
-          "phoneticTranscription": "Сізде интернет бар ма?",
-          "grammarNote": "Типичный вопрос в общественных местах."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Не болды?",
+          "phoneticTranscription": "Не болды?",
+          "grammarNote": "Живое разговорное выражение: «Что случилось?»"
         },
         {
           "id": "d05_07",
           "step": 7,
-          "promptRu": "Скажите: «У меня нет наличных денег»",
-          "targetKk": "Менде қолма-қол ақша жоқ",
-          "phoneticTranscription": "Менде қолма-қол ақша жоқ",
-          "grammarNote": "«Қолма-қол ақша» — наличные деньги."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Мұнда орын бар ма?",
+          "phoneticTranscription": "Мұнда орын бар ма?",
+          "grammarNote": "«Мұнда» — тут / здесь."
         },
         {
           "id": "d05_08",
           "step": 8,
-          "promptRu": "Спросите: «Здесь есть свободное место?»",
-          "targetKk": "Мұнда орын бар ма?",
-          "phoneticTranscription": "Мұнда орын бар ма?",
-          "grammarNote": "«Орын» — место."
+          "type": "speech",
+          "promptRu": "Скажите в магазине: «У меня нет наличных денег»",
+          "targetKk": "Менде қолма-қол ақша жоқ",
+          "phoneticTranscription": "Менде қолма-қол ақша жоқ",
+          "grammarNote": "«Қолма-қол ақша» — наличные."
         },
         {
           "id": "d05_09",
           "step": 9,
+          "type": "speech",
           "promptRu": "Скажите уверенно: «Никаких проблем нет»",
           "targetKk": "Ешқандай мәселе жоқ",
           "phoneticTranscription": "Ешқандай мәселе жоқ",
-          "grammarNote": "«Ешқандай» — никакой, «мәселе» — проблема/вопрос."
+          "grammarNote": "«Ешқандай» — никакой, «мәселе» — проблема."
         },
         {
           "id": "d05_10",
           "step": 10,
-          "promptRu": "Скажите: «У нас все готово»",
+          "type": "speech",
+          "promptRu": "Скажите в команде: «У нас все готово»",
           "targetKk": "Бізде бәрі дайын",
           "phoneticTranscription": "Бізде бәрі дайын",
-          "grammarNote": "«Дайын» — готов / готово."
+          "grammarNote": "«Бізде» — у нас, «дайын» — готово."
         }
       ]
     },
@@ -510,88 +916,169 @@
         "Бұл": "Это",
         "Беріңізші": "Дайте, пожалуйста",
         "Мың": "1000",
-        "Есеп": "Счет"
+        "Есеп": "Счет",
+        "Шай": "Чай",
+        "Су": "Вода",
+        "Керек": "Нужно / требуется"
       },
+      "vocabList": [
+        {
+          "wordKk": "Бір",
+          "translationRu": "Один (1)",
+          "phonetic": "Бір",
+          "exampleSentence": "Бір кофе беріңізші."
+        },
+        {
+          "wordKk": "Екі",
+          "translationRu": "Два (2)",
+          "phonetic": "Екі",
+          "exampleSentence": "Екі билет алайын."
+        },
+        {
+          "wordKk": "Үш",
+          "translationRu": "Три (3)",
+          "phonetic": "Үш",
+          "exampleSentence": "Үш шай, өтінемін."
+        },
+        {
+          "wordKk": "Қанша?",
+          "translationRu": "Сколько?",
+          "phonetic": "Қанша?",
+          "exampleSentence": "Бұл қанша тұрады?"
+        },
+        {
+          "wordKk": "Беріңізші",
+          "translationRu": "Дайте, пожалуйста",
+          "phonetic": "Беріңізші",
+          "exampleSentence": "Маған мәзірді беріңізші."
+        },
+        {
+          "wordKk": "Есеп",
+          "translationRu": "Счет",
+          "phonetic": "Есеп",
+          "exampleSentence": "Есепті әкеліңізші."
+        },
+        {
+          "wordKk": "Мың",
+          "translationRu": "Тысяча (1000)",
+          "phonetic": "Мың",
+          "exampleSentence": "Бір мың теңге."
+        },
+        {
+          "wordKk": "Керек",
+          "translationRu": "Нужно / требуется",
+          "phonetic": "Керек",
+          "exampleSentence": "Бұл маған керек."
+        },
+        {
+          "wordKk": "Шай",
+          "translationRu": "Чай",
+          "phonetic": "Шай",
+          "exampleSentence": "Ыстық шай ішесіз бе?"
+        },
+        {
+          "wordKk": "Су",
+          "translationRu": "Вода",
+          "phonetic": "Су",
+          "exampleSentence": "Бір бөтелке су беріңізші."
+        }
+      ],
       "drills": [
         {
           "id": "d06_01",
           "step": 1,
-          "promptRu": "Скажите: «Один кофе, пожалуйста»",
-          "targetKk": "Бір кофе беріңізші",
-          "phoneticTranscription": "Бір кофе беріңізші",
-          "grammarNote": "Универсальный заказ в кофейне."
+          "type": "vocab",
+          "promptRu": "Выучите базовый запрос цены: «Сколько стоит?»",
+          "targetKk": "Қанша тұрады?",
+          "phoneticTranscription": "Қанша тұрады?",
+          "grammarNote": "«Қанша» — сколько, «тұрады» — стоит."
         },
         {
           "id": "d06_02",
           "step": 2,
-          "promptRu": "Спросите: «Сколько это стоит?»",
-          "targetKk": "Бұл қанша тұрады?",
-          "phoneticTranscription": "Бұл қанша тұрады?",
-          "grammarNote": "Главная фраза для покупок и базара."
+          "type": "vocab",
+          "promptRu": "Выучите вежливую просьбу: «Дайте, пожалуйста»",
+          "targetKk": "Беріңізші",
+          "phoneticTranscription": "Беріңізші",
+          "grammarNote": "Глагол «беру» (давать) + суффикс просьбы «-іңізші»."
         },
         {
           "id": "d06_03",
           "step": 3,
-          "promptRu": "Скажите: «Два билета»",
-          "targetKk": "Екі билет",
-          "phoneticTranscription": "Екі билет",
-          "grammarNote": "После числительных существительное остается в единственном числе!"
+          "type": "slotSubstitution",
+          "slotVariable": "Бір кофе",
+          "slotTemplate": "[слот] беріңізші",
+          "promptRu": "Закажите в кофейне: «Один кофе, пожалуйста»",
+          "targetKk": "Бір кофе беріңізші",
+          "phoneticTranscription": "Бір кофе беріңізші",
+          "grammarNote": "Существительное после числа не принимает множественное окончание."
         },
         {
           "id": "d06_04",
           "step": 4,
-          "promptRu": "Скажите: «Сто тенге»",
-          "targetKk": "Жүз теңге",
-          "phoneticTranscription": "Жүз теңге",
-          "grammarNote": "«Жүз» — 100."
+          "type": "slotSubstitution",
+          "slotVariable": "Екі билет",
+          "slotTemplate": "[слот] беріңізші",
+          "promptRu": "Попросите в кассе: «Два билета, пожалуйста»",
+          "targetKk": "Екі билет беріңізші",
+          "phoneticTranscription": "Екі билет беріңізші",
+          "grammarNote": "«Билет» остается в единственном числе."
         },
         {
           "id": "d06_05",
           "step": 5,
-          "promptRu": "Спросите: «Который час?»",
-          "targetKk": "Сағат неше?",
-          "phoneticTranscription": "Сағат неше?",
-          "grammarNote": "«Сағат» — часы/время, «неше» — сколько (по порядку)."
+          "type": "slotSubstitution",
+          "slotVariable": "Үш шай",
+          "slotTemplate": "[слот] беріңізші",
+          "promptRu": "Закажите за столом: «Три чая, пожалуйста»",
+          "targetKk": "Үш шай беріңізші",
+          "phoneticTranscription": "Үш шай беріңізші",
+          "grammarNote": "«Үш» — 3."
         },
         {
           "id": "d06_06",
           "step": 6,
-          "promptRu": "Скажите: «Одна тысяча тенге»",
-          "targetKk": "Бір мың теңге",
-          "phoneticTranscription": "Бір мың теңге",
-          "grammarNote": "«Мың» — 1000."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Сағат неше?",
+          "phoneticTranscription": "Сағат неше?",
+          "grammarNote": "Классический вопрос времени: «Который час?»"
         },
         {
           "id": "d06_07",
           "step": 7,
-          "promptRu": "Попросите в кафе: «Принесите счет, пожалуйста»",
-          "targetKk": "Есепті әкеліңізші",
-          "phoneticTranscription": "Есепті әкеліңізші",
-          "grammarNote": "«Есеп» — счет, «әкеліңізші» — принесите, пожалуйста."
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Картамен төлеуге бола ма?",
+          "phoneticTranscription": "Картамен төлеуге бола ма?",
+          "grammarNote": "«Картамен» — с помощью карты."
         },
         {
           "id": "d06_08",
           "step": 8,
-          "promptRu": "Спросите: «Можно оплатить картой / Kaspi?»",
-          "targetKk": "Картамен төлеуге бола ма?",
-          "phoneticTranscription": "Картамен төлеуге бола ма?",
-          "grammarNote": "«Картамен» — картой, «төлеуге бола ма» — можно оплатить?"
+          "type": "speech",
+          "promptRu": "Спросите на базаре: «Сколько это стоит?»",
+          "targetKk": "Бұл қанша тұрады?",
+          "phoneticTranscription": "Бұл қанша тұрады?",
+          "grammarNote": "Главный торговый вопрос."
         },
         {
           "id": "d06_09",
           "step": 9,
-          "promptRu": "Скажите: «Это мне нужно (я беру)»",
-          "targetKk": "Мынау маған керек",
-          "phoneticTranscription": "Мынау маған керек",
-          "grammarNote": "«Мынау» — вот это, «керек» — нужно."
+          "type": "speech",
+          "promptRu": "Попросите официанта: «Принесите счет, пожалуйста»",
+          "targetKk": "Есепті әкеліңізші",
+          "phoneticTranscription": "Есепті әкеліңізші",
+          "grammarNote": "«Есепті» — счет (винительный падеж), «әкеліңізші» — принесите."
         },
         {
           "id": "d06_10",
           "step": 10,
-          "promptRu": "Закажите: «Три чая и две воды»",
-          "targetKk": "Үш шай және екі су",
-          "phoneticTranscription": "Үш шай және екі су",
-          "grammarNote": "«Және» — союз 'и'."
+          "type": "speech",
+          "promptRu": "Скажите при выборе: «Это мне нужно (я беру)»",
+          "targetKk": "Мынау маған керек",
+          "phoneticTranscription": "Мынау маған керек",
+          "grammarNote": "«Мынау» — вот это, «маған керек» — мне нужно."
         }
       ]
     },
@@ -603,100 +1090,168 @@
       "grammarExplanation": "Финальный спринт Недели 1 объединяет все 6 пройденных паттернов. Ваша задача — отвечать вслух уверенно, не глядя в текст.",
       "keyVocabulary": {
         "Спринт": "Быстрый речевой тест",
-        "Сенімділік": "Уверенность"
+        "Сенімділік": "Уверенность",
+        "Бәрі": "Всё",
+        "Көп-көп": "Очень много",
+        "Түсіндім": "Понял",
+        "Көріскенше": "До встречи"
       },
+      "vocabList": [
+        {
+          "wordKk": "Сенімділік",
+          "translationRu": "Уверенность",
+          "phonetic": "Сенімділік",
+          "exampleSentence": "Сенімді сөйлеңіз."
+        },
+        {
+          "wordKk": "Көп-көп",
+          "translationRu": "Очень много / премного",
+          "phonetic": "Көп-көп",
+          "exampleSentence": "Көп-көп рахмет!"
+        },
+        {
+          "wordKk": "Жаңадан",
+          "translationRu": "Заново / с недавних пор",
+          "phonetic": "Жаңадан",
+          "exampleSentence": "Мен қазақша жаңадан үйреніп жүрмін."
+        },
+        {
+          "wordKk": "Бірақ",
+          "translationRu": "Но / однако",
+          "phonetic": "Бірақ",
+          "exampleSentence": "Түсінемін, бірақ сөйлей алмаймын."
+        },
+        {
+          "wordKk": "Қана",
+          "translationRu": "Только / лишь",
+          "phonetic": "Қана",
+          "exampleSentence": "Аздап қана білемін."
+        },
+        {
+          "wordKk": "Дос",
+          "translationRu": "Друг / приятель",
+          "phonetic": "Дос",
+          "exampleSentence": "Ол менің жақын досым."
+        },
+        {
+          "wordKk": "Жұмыс",
+          "translationRu": "Работа / дело",
+          "phonetic": "Жұмыс",
+          "exampleSentence": "Жұмыс қалай?"
+        },
+        {
+          "wordKk": "Жақсылық",
+          "translationRu": "Добро / благополучие",
+          "phonetic": "Жақсылық",
+          "exampleSentence": "Жақсылық болсын!"
+        }
+      ],
       "drills": [
         {
           "id": "d07_01",
           "step": 1,
-          "promptRu": "Поздоровайтесь и спросите дела у собеседника",
-          "targetKk": "Сәлеметсіз бе, қалайсыз?",
-          "phoneticTranscription": "Сәлеметсіз бе, қалайсыз?",
-          "grammarNote": "Старт спринта."
+          "type": "vocab",
+          "promptRu": "Повторите выражение высшей благодарности: «Огромное спасибо»",
+          "targetKk": "Көп-көп рахмет!",
+          "phoneticTranscription": "Көп-көп рахмет!",
+          "grammarNote": "Удвоение основы «көп» усиливает значение."
         },
         {
           "id": "d07_02",
           "step": 2,
-          "promptRu": "Ответьте: «Хорошо, спасибо, а вы как?»",
+          "type": "slotSubstitution",
+          "slotVariable": "Марк",
+          "slotTemplate": "Менің атым [слот]",
+          "promptRu": "Подставьте свое имя: «Меня зовут Марк»",
+          "targetKk": "Менің атым Марк",
+          "phoneticTranscription": "Менің атым Марк",
+          "grammarNote": "Четко произнесите формулу имени."
+        },
+        {
+          "id": "d07_03",
+          "step": 3,
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Сәлеметсіз бе, қалайсыз?",
+          "phoneticTranscription": "Сәлеметсіз бе, қалайсыз?",
+          "grammarNote": "Стартовая связка приветствия."
+        },
+        {
+          "id": "d07_04",
+          "step": 4,
+          "type": "listening",
+          "promptRu": "Прослушайте аудиозапись и повторите на слух:",
+          "targetKk": "Сіз қазақша сөйлейсіз бе?",
+          "phoneticTranscription": "Сіз қазақша сөйлейсіз бе?",
+          "grammarNote": "Интонация вежливого вопроса."
+        },
+        {
+          "id": "d07_05",
+          "step": 5,
+          "type": "speech",
+          "promptRu": "Ответьте на приветствие: «Хорошо, спасибо, а вы как?»",
           "targetKk": "Жақсы, рахмет, өзіңіз қалайсыз?",
           "phoneticTranscription": "Жақсы, рахмет, өзіңіз қалайсыз?",
           "grammarNote": "Вежливый возврат вопроса."
         },
         {
-          "id": "d07_03",
-          "step": 3,
-          "promptRu": "Представьтесь: «Меня зовут Марк, а вас как зовут?»",
-          "targetKk": "Менің атым Марк, сіздің атыңыз кім?",
-          "phoneticTranscription": "Менің атым Марк, сіздің атыңыз кім?",
-          "grammarNote": "Формула знакомства."
-        },
-        {
-          "id": "d07_04",
-          "step": 4,
-          "promptRu": "Скажите: «Очень приятно познакомиться!»",
-          "targetKk": "Танысқаныма қуаныштымын",
-          "phoneticTranscription": "Танысқаныма қуаныштымын",
-          "grammarNote": "Искренняя улыбка в голосе."
-        },
-        {
-          "id": "d07_05",
-          "step": 5,
-          "promptRu": "Спросите: «Вы говорите по-казахски?»",
-          "targetKk": "Сіз қазақша сөйлейсіз бе?",
-          "phoneticTranscription": "Сіз қазақша сөйлейсіз бе?",
-          "grammarNote": "Проверка языка."
-        },
-        {
           "id": "d07_06",
           "step": 6,
-          "promptRu": "Ответьте: «Да, но я говорю только немного»",
+          "type": "speech",
+          "promptRu": "Скажите тепло: «Очень приятно познакомиться!»",
+          "targetKk": "Танысқаныма қуаныштымын",
+          "phoneticTranscription": "Танысқаныма қуаныштымын",
+          "grammarNote": "Улыбка и доброжелательность в интонации."
+        },
+        {
+          "id": "d07_07",
+          "step": 7,
+          "type": "speech",
+          "promptRu": "Ответьте честно: «Да, но я говорю только немного»",
           "targetKk": "Иә, бірақ мен аздап қана сөйлеймін",
           "phoneticTranscription": "Иә, бірақ мен аздап қана сөйлеймін",
           "grammarNote": "«Бірақ» — но, «аздап қана» — только немного."
         },
         {
-          "id": "d07_07",
-          "step": 7,
+          "id": "d07_08",
+          "step": 8,
+          "type": "speech",
           "promptRu": "Попросите: «Говорите помедленнее, пожалуйста»",
           "targetKk": "Ақырын сөйлеңізші",
           "phoneticTranscription": "Ақырын сөйлеңізші",
-          "grammarNote": "Просьба о снижении темпа речи."
+          "grammarNote": "Снижение темпа речи собеседника."
         },
         {
-          "id": "d07_08",
-          "step": 8,
-          "promptRu": "Закажите: «Дайте мне один чай, пожалуйста»",
+          "id": "d07_09",
+          "step": 9,
+          "type": "speech",
+          "promptRu": "Закажите в кафе: «Дайте мне один чай, пожалуйста»",
           "targetKk": "Маған бір шай беріңізші",
           "phoneticTranscription": "Маған бір шай беріңізші",
           "grammarNote": "Заказ в кафе."
         },
         {
-          "id": "d07_09",
-          "step": 9,
+          "id": "d07_10",
+          "step": 10,
+          "type": "speech",
           "promptRu": "Спросите цену: «Сколько это стоит?»",
           "targetKk": "Бұл қанша тұрады?",
           "phoneticTranscription": "Бұл қанша тұрады?",
           "grammarNote": "Вопрос цены."
         },
         {
-          "id": "d07_10",
-          "step": 10,
-          "promptRu": "Спросите: «Можно оплатить картой?»",
+          "id": "d07_11",
+          "step": 11,
+          "type": "speech",
+          "promptRu": "Спросите способ оплаты: «Можно оплатить картой?»",
           "targetKk": "Картамен төлеуге бола ма?",
           "phoneticTranscription": "Картамен төлеуге бола ма?",
           "grammarNote": "Способ оплаты."
         },
         {
-          "id": "d07_11",
-          "step": 11,
-          "promptRu": "Поблагодарите: «Большое спасибо!»",
-          "targetKk": "Көп-көп рахмет!",
-          "phoneticTranscription": "Көп-көп рахмет!",
-          "grammarNote": "«Көп-көп» — очень много."
-        },
-        {
           "id": "d07_12",
           "step": 12,
+          "type": "speech",
           "promptRu": "Попрощайтесь: «До свидания, до скорой встречи!»",
           "targetKk": "Сау болыңыз, көріскенше",
           "phoneticTranscription": "Сау болыңыз, көріскенше",
