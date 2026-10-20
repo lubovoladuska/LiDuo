@@ -30,12 +30,14 @@ class AiPartnerService {
   AiPartnerService._init();
 
   Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    final key = prefs.getString(_prefApiKey);
-    if (key != null && key.isNotEmpty && key != _currentApiKey) {
-      _currentApiKey = key;
-      _initModel(key);
-    }
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final key = prefs.getString(_prefApiKey);
+      if (key != null && key.isNotEmpty && key != _currentApiKey) {
+        _currentApiKey = key;
+        _initModel(key);
+      }
+    } catch (_) {}
   }
 
   void _initModel(String apiKey) {

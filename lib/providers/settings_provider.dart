@@ -20,22 +20,26 @@ class SettingsProvider extends ChangeNotifier {
   bool get isDark => _themeMode == ThemeMode.dark;
 
   Future<void> loadSettings() async {
-    final prefs = await SharedPreferences.getInstance();
+    try {
+      final prefs = await SharedPreferences.getInstance();
 
-    final themeStr = prefs.getString(_prefThemeMode) ?? 'dark';
-    if (themeStr == 'light') {
-      _themeMode = ThemeMode.light;
-    } else {
-      _themeMode = ThemeMode.dark;
+      final themeStr = prefs.getString(_prefThemeMode) ?? 'dark';
+      if (themeStr == 'light') {
+        _themeMode = ThemeMode.light;
+      } else {
+        _themeMode = ThemeMode.dark;
+      }
+
+      _speechRate = prefs.getDouble(_prefSpeechRate) ?? 0.85;
+      await TtsService.instance.setSpeechRate(_speechRate);
+
+      _geminiApiKey = await AiPartnerService.instance.getApiKey() ?? '';
+    } catch (_) {
+      // Fallback defaults on desktop initialization issues
+    } finally {
+      _isLoaded = true;
+      notifyListeners();
     }
-
-    _speechRate = prefs.getDouble(_prefSpeechRate) ?? 0.85;
-    await TtsService.instance.setSpeechRate(_speechRate);
-
-    _geminiApiKey = await AiPartnerService.instance.getApiKey() ?? '';
-
-    _isLoaded = true;
-    notifyListeners();
   }
 
   Future<void> toggleTheme() async {
