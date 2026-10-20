@@ -254,7 +254,10 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                                   border: Border.all(color: AppColors.gold.withAlpha(50)),
                                 ),
                                 child: Text(
-                                  settings.label('Шаблон / Каркас: ${currentDrill.slotTemplate}', 'Үлгі: ${currentDrill.slotTemplate}'),
+                                  settings.label(
+                                    'Речевой каркас: ${currentDrill.slotTemplate!.replaceAll(RegExp(r'\[(слот|slot)\]', caseSensitive: false), '[ ... ]')}',
+                                    'Сөйлеу қалыбы: ${currentDrill.slotTemplate!.replaceAll(RegExp(r'\[(слот|slot)\]', caseSensitive: false), '[ ... ]')}',
+                                  ),
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: AppColors.textSecondary(context),
@@ -273,7 +276,7 @@ class _DrillWorkoutScreenState extends State<DrillWorkoutScreen> {
                                   border: Border.all(color: AppColors.tealAccent(context)),
                                 ),
                                 child: Text(
-                                  '${settings.label('Слот', 'Слот')}: «${currentDrill.slotVariable}»',
+                                  '${settings.label('Вставьте слово', 'Қойылатын сөз')}: «${currentDrill.slotVariable}»',
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w800,

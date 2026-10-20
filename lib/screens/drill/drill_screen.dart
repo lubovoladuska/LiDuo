@@ -303,7 +303,7 @@ class _DrillScreenState extends State<DrillScreen> {
         color = AppColors.tealLight;
         break;
       case DrillType.slotSubstitution:
-        label = settings.label('2/4 ПОДСТАНОВКА (SLOT MATRIX)', '2/4 ҚАЛЫПҚА ҚОЮ');
+        label = settings.label('2/4 КОНСТРУКТОР ФРАЗ', '2/4 СӨЙЛЕУ ҚАЛЫБЫ');
         icon = Icons.dashboard_customize_rounded;
         color = AppColors.gold;
         break;
@@ -443,17 +443,18 @@ class _DrillScreenState extends State<DrillScreen> {
     );
   }
 
-  /// Карточка подстановочного тренажера (Slot Substitution)
+  /// Карточка речевого конструктора (подстановка слова в каркас)
   Widget _buildSlotCard(AudioDrill drill, DrillSessionProvider session, SettingsProvider settings) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final template = drill.slotTemplate ?? drill.targetKk;
+    final rawTemplate = drill.slotTemplate ?? drill.targetKk;
+    final template = rawTemplate.replaceAll(RegExp(r'\[(слот|slot)\]', caseSensitive: false), '[ ... ]');
     final variable = drill.slotVariable ?? drill.targetKk;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          settings.label('ПОДСТАВЬТЕ СЛОВО В ШАБЛОН:', 'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:'),
+          settings.label('ВСТАВЬТЕ СЛОВО В РЕЧЕВОЙ КАРКАС:', 'СӨЗДІ ҚАЛЫПҚА ҚОЙЫП АЙТЫҢЫЗ:'),
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
@@ -473,7 +474,7 @@ class _DrillScreenState extends State<DrillScreen> {
         ),
         const SizedBox(height: 18),
 
-        // Рамка грамматического каркаса с акцентированным слотом
+        // Рамка грамматического каркаса с акцентированным словом
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -487,7 +488,7 @@ class _DrillScreenState extends State<DrillScreen> {
           child: Column(
             children: [
               Text(
-                settings.label('Шаблон / Каркас: $template', 'Үлгі: $template'),
+                settings.label('Речевой каркас: $template', 'Сөйлеу қалыбы: $template'),
                 style: TextStyle(
                   fontSize: 13,
                   color: AppColors.textSecondary(context),
@@ -503,7 +504,7 @@ class _DrillScreenState extends State<DrillScreen> {
                   border: Border.all(color: AppColors.tealLight),
                 ),
                 child: Text(
-                  '${settings.label('Слот', 'Слот')}: «$variable»',
+                  '${settings.label('Вставьте слово', 'Қойылатын сөз')}: «$variable»',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,

@@ -65,20 +65,28 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   Future<void> _startSlotMatrix() async {
     final stats = context.read<StatsProvider>();
+    final settings = context.read<SettingsProvider>();
     final drills = await CourseRepository.instance.getSlotMatrixDrills(
       completedDays: stats.completedDays,
       count: 12,
     );
-    _launchWorkout(drills, 'Подстановочный тренажер (Slot Matrix)');
+    _launchWorkout(
+      drills,
+      settings.label('Конструктор речевых фраз', 'Сөйлеу қалыбы тренажері'),
+    );
   }
 
   Future<void> _startVocabBlitz() async {
     final stats = context.read<StatsProvider>();
+    final settings = context.read<SettingsProvider>();
     final drills = await CourseRepository.instance.getVocabBlitzDrills(
       completedDays: stats.completedDays,
       count: 12,
     );
-    _launchWorkout(drills, 'Словарный спринт (Vocab Blitz)');
+    _launchWorkout(
+      drills,
+      settings.label('Словарный спринт', 'Сөздік спринт'),
+    );
   }
 
   Future<void> _startMistakeReview() async {
@@ -211,12 +219,12 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
                 const SizedBox(height: 12),
 
-                // Карточка Подстановочного тренажера
+                // Карточка Подстановочного тренажера (Конструктор фраз)
                 _buildWorkoutCard(
                   context,
-                  title: settings.label('🧩 Подстановочный тренажер (Slot Matrix)', '🧩 Қалып тренажері'),
-                  subtitle: settings.label('Отработка быстрой подстановки в грамматические слоты', 'Грамматикалық қалыптарға жылдам қою'),
-                  badge: settings.label('12 слотов', '12 қалып'),
+                  title: settings.label('🧩 Конструктор речевых фраз', '🧩 Сөйлеу қалыбы тренажері'),
+                  subtitle: settings.label('Отработка быстрой подстановки слов в речевые каркасы', 'Дайын үлгілерге сөздерді жылдам қою'),
+                  badge: settings.label('12 шаблонов', '12 үлгі'),
                   badgeColor: AppColors.goldAccent(context),
                   onTap: _startSlotMatrix,
                 ),
